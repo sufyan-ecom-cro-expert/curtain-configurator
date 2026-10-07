@@ -1,0 +1,74 @@
+.marquee {
+  display: flex;
+  overflow: hidden;
+  padding: var(--marquee-padding) 0;
+  background: var(--marquee-bg);
+  color: var(--marquee-text);
+}
+
+.marquee__group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: marquee-scroll var(--marquee-speed) linear infinite;
+}
+
+.marquee--reverse .marquee__group {
+  animation-direction: reverse;
+}
+
+.marquee--pause:hover .marquee__group {
+  animation-play-state: paused;
+}
+
+.marquee__item {
+  display: flex;
+  align-items: center;
+  font-size: var(--marquee-size);
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.marquee--uppercase .marquee__item {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Small diamond between items. Equal margins keep the spacing even where the groups meet. */
+.marquee__item::after {
+  content: '';
+  width: 0.45em;
+  height: 0.45em;
+  margin: 0 2.4em;
+  background: currentColor;
+  opacity: 0.6;
+  transform: rotate(45deg);
+}
+
+.marquee__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.marquee__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__group {
+    animation-play-state: paused;
+  }
+}

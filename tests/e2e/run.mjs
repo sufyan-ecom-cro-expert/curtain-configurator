@@ -47,6 +47,18 @@ const revealAll = async () => {
 await page.addStyleTag({ content: '#PBarNextFrameWrapper, #preview-bar-iframe { display: none !important; }' }).catch(() => {});
 await page.screenshot({ path: `${OUT}desktop-initial.png` });
 
+const marquee = await page.evaluate(() => {
+  const el = document.querySelector('.marquee');
+  const groups = el ? [...el.querySelectorAll('.marquee__group')] : [];
+  return {
+    aboveConfigurator: !!el && !!(el.compareDocumentPosition(document.querySelector('curtain-configurator')) & Node.DOCUMENT_POSITION_FOLLOWING),
+    animated: groups.length === 2 && getComputedStyle(groups[0]).animationName === 'marquee-scroll',
+    duplicateHidden: groups[1]?.getAttribute('aria-hidden') === 'true',
+    seamless: groups.length === 2 && groups[0].getBoundingClientRect().width >= el.getBoundingClientRect().width,
+  };
+});
+check('marquee above the configurator', marquee.aboveConfigurator && marquee.animated && marquee.duplicateHidden && marquee.seamless, JSON.stringify(marquee));
+
 const cc = page.locator('curtain-configurator');
 check('configurator rendered', (await cc.count()) === 1);
 check('no Panels control on page', (await page.locator('[name="panels"], [name*="Panels"], variant-selects, select').count()) === 0);
@@ -76,20 +88,20 @@ const layout = await page.evaluate(() => {
   const rect = (el) => el.getBoundingClientRect();
   const stage = rect(document.querySelector('.cc__stage'));
   const thumb = rect(document.querySelector('.cc__thumb'));
-  const main = document.getElementById('MainContent').offsetTop;
+  const sectionTop = document.querySelector('curtain-configurator').closest('.shopify-section').getBoundingClientRect().top + window.scrollY;
   const padTop = parseFloat(getComputedStyle(document.querySelector('.cc')).paddingTop);
   const summary = document.querySelector('.cc__summary');
   const rows = [...document.querySelectorAll('.cc__panel > .cc__row')];
   return {
     thumbLeftOfStage: thumb.right <= stage.left && Math.abs(thumb.top - stage.top) < 2,
     stageHeight: Math.round(stage.height),
-    expectedHeight: Math.round(window.innerHeight - main - padTop),
+    expectedHeight: Math.round(window.innerHeight - sectionTop - padTop),
     rows: rows.length,
     rowsAfterSummary: rows.every((row) => summary.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_FOLLOWING),
   };
 });
 check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
-check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
+check('main image fills screen below header and marquee', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
 check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
 const badges = await page.evaluate(() => {
   const list = document.querySelector('.cc__badges');

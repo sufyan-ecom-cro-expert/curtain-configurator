@@ -37,10 +37,10 @@
   grid-template-columns: 8rem minmax(0, 1fr);
 }
 
-/* Fill the first screen below the header and the section's top padding. */
+/* Fill the first screen below everything above this section and its top padding. */
 .cc__stage {
   position: relative;
-  height: calc(100vh - var(--cc-header-height, 0px) - var(--cc-pad-top));
+  height: calc(100vh - var(--cc-offset-top, 0px) - var(--cc-pad-top));
   overflow: hidden;
   background: var(--cc-surface);
 }

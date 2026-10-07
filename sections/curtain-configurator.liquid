@@ -75,9 +75,15 @@
   }
 {% endstyle %}
 
-{%- comment -%} Measured before the gallery renders so the full-height image never shifts. {%- endcomment -%}
+{%- comment -%}
+  Measures everything above this section (header, marquee) before the gallery renders,
+  so the full-height image never shifts.
+{%- endcomment -%}
 <script>
-  document.documentElement.style.setProperty('--cc-header-height', (document.getElementById('MainContent')?.offsetTop || 0) + 'px');
+  (() => {
+    const section = document.currentScript.closest('.shopify-section');
+    section.style.setProperty('--cc-offset-top', `${section.getBoundingClientRect().top + window.scrollY}px`);
+  })();
 </script>
 
 <div class="cc">

@@ -16,11 +16,6 @@ const addDays = (days, workingDaysOnly) => {
   return date;
 };
 
-const setHeaderHeight = () =>
-  document.documentElement.style.setProperty(
-    '--cc-header-height',
-    `${document.getElementById('MainContent')?.offsetTop || 0}px`
-  );
 
 const formatDay = (date) =>
   `${date.getDate()} ${date.toLocaleDateString(document.documentElement.lang || undefined, { month: 'long' })}`;
@@ -30,7 +25,11 @@ class CurtainConfigurator extends HTMLElement {
     this.querySelectorAll('[data-media-target]').forEach((thumb) =>
       thumb.addEventListener('click', () => this.showMedia(thumb.dataset.mediaTarget))
     );
-    window.addEventListener('resize', setHeaderHeight);
+    this.section = this.closest('.shopify-section');
+    this.onResize = () =>
+      this.section.style.setProperty('--cc-offset-top', `${this.section.getBoundingClientRect().top + window.scrollY}px`);
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
 
     this.rows = [...this.querySelectorAll('.cc__row')];
     this.rows.forEach((row) =>
@@ -80,6 +79,10 @@ class CurtainConfigurator extends HTMLElement {
     const start = addDays(Number(minDays), workingDaysOnly);
     const end = addDays(Math.max(Number(minDays), Number(maxDays)), workingDaysOnly);
     note.textContent = deliveryNote.replace('[start]', formatDay(start)).replace('[end]', formatDay(end));
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('resize', this.onResize);
   }
 
   // Animates the row's height. The details element stays open until the closing animation ends.
