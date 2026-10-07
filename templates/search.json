@@ -1,0 +1,72 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-search",
+      "disabled": true,
+      "settings": {
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "article_show_date": true,
+        "article_show_author": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "1789389872ab3f0ec0": {
+      "type": "apps",
+      "blocks": {
+        "prefixbox_prefixbox_search_RVJtKB": {
+          "type": "shopify://apps/prefixbox/blocks/prefixbox-search/068324e8-702c-43d1-a68b-92d83eda6597",
+          "settings": {
+            "se_inherit_colors": true,
+            "color_p": "#121212",
+            "color_s": "#334fb4",
+            "color_b": "#fafafa",
+            "bg_type": "none",
+            "color_bg": "#ffffff",
+            "d_p_p_row": 4,
+            "m_p_p_row": 2,
+            "enable_filtering": true,
+            "filter_type": "topMode",
+            "filter_w": 25,
+            "p_c_text_alignment": "left",
+            "inner_c_p_f": 0,
+            "inner_c_p": 0,
+            "img_b_radius": 0,
+            "img_a_r": "portrait",
+            "img_a": "default",
+            "custom_css": ".div:empty { display: none }",
+            "custom_js": "// custom_js"
+          }
+        }
+      },
+      "block_order": [
+        "prefixbox_prefixbox_search_RVJtKB"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1789389872ab3f0ec0"
+  ]
+}
