@@ -30,11 +30,11 @@ class CurtainConfigurator extends HTMLElement {
     this.setupZoom();
     this.section = this.closest('.shopify-section');
     this.onResize = () =>
-      this.section.style.setProperty('--cc-offset-top', `${this.section.getBoundingClientRect().top + window.scrollY}px`);
+      this.section.style.setProperty('--curtain-offset-top', `${this.section.getBoundingClientRect().top + window.scrollY}px`);
     this.onResize();
     window.addEventListener('resize', this.onResize);
 
-    this.rows = [...this.querySelectorAll('.cc__row')];
+    this.rows = [...this.querySelectorAll('.curtain-configurator__row')];
     this.rows.forEach((row) =>
       row.querySelector('summary').addEventListener('click', (event) => {
         event.preventDefault();
@@ -86,8 +86,8 @@ class CurtainConfigurator extends HTMLElement {
 
   // Mouse: zoom while hovering. Touch and pen: tap to toggle, drag to pan. The button works for everyone.
   setupZoom() {
-    this.stage = this.querySelector('.cc__stage');
-    this.zoom = this.querySelector('.cc__zoom');
+    this.stage = this.querySelector('.curtain-configurator__stage');
+    this.zoom = this.querySelector('.curtain-configurator__zoom');
     this.zoomToggle = this.querySelector('[data-zoom-toggle]');
     if (!this.zoom) return;
 
@@ -103,7 +103,7 @@ class CurtainConfigurator extends HTMLElement {
   }
 
   setZoom(on, event) {
-    const slide = this.querySelector('.cc__slide.is-active[data-zoom-src]');
+    const slide = this.querySelector('.curtain-configurator__slide.is-active[data-zoom-src]');
     if (on && !slide) return;
 
     this.zoomed = on;
@@ -138,7 +138,7 @@ class CurtainConfigurator extends HTMLElement {
     row.animation?.cancel();
     row.classList.toggle('is-open', open);
     row.open = true;
-    const endHeight = open ? row.offsetHeight : row.offsetHeight - row.querySelector('.cc__row-content').offsetHeight;
+    const endHeight = open ? row.offsetHeight : row.offsetHeight - row.querySelector('.curtain-configurator__row-content').offsetHeight;
 
     row.style.overflow = 'hidden';
     row.animation = row.animate(

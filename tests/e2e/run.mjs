@@ -34,8 +34,8 @@ await page.addInitScript(() => {
 await page.goto(`${STORE}${PDP}`, { waitUntil: 'load' });
 await page.waitForTimeout(1500);
 const loadShifts = await page.evaluate(() => {
-  const cc = document.querySelector('.cc');
-  return { total: window.__loadShifts, note: getComputedStyle(document.querySelector('.cc__note')).display, error: getComputedStyle(document.querySelector('.cc__form-error')).display };
+  const cc = document.querySelector('.curtain-configurator');
+  return { total: window.__loadShifts, note: getComputedStyle(document.querySelector('.curtain-configurator__note')).display, error: getComputedStyle(document.querySelector('.curtain-configurator__form-error')).display };
 });
 check('reserved slots are not hidden by Dawn', loadShifts.note === 'block' && loadShifts.error === 'block', JSON.stringify(loadShifts));
 await page.evaluate(() => {
@@ -69,8 +69,8 @@ const spec = (n) => page.locator(`[data-spec="${n}"]`).innerText();
 const setWidth = async (v) => {
   await page.fill('[name="width"]', String(v));
 };
-const pickDrop = (v) => page.locator(`label.cc__drop:has-text("${v}")`).click();
-const pickColor = (v) => page.locator(`label.cc__swatch:has-text("${v}")`).click();
+const pickDrop = (v) => page.locator(`label.curtain-configurator__drop:has-text("${v}")`).click();
+const pickColor = (v) => page.locator(`label.curtain-configurator__swatch:has-text("${v}")`).click();
 
 const expectedDay = (days) => {
   const date = new Date();
@@ -80,17 +80,17 @@ const expectedDay = (days) => {
   }
   return `${date.getDate()} ${date.toLocaleDateString('en', { month: 'long' })}`;
 };
-const note = await page.locator('.cc__note').innerText();
+const note = await page.locator('.curtain-configurator__note').innerText();
 check('delivery dates', note === `Made to order · Ships ${expectedDay(7)} to ${expectedDay(10)}`, note);
 
 const layout = await page.evaluate(() => {
   const rect = (el) => el.getBoundingClientRect();
-  const stage = rect(document.querySelector('.cc__stage'));
-  const thumb = rect(document.querySelector('.cc__thumb'));
+  const stage = rect(document.querySelector('.curtain-configurator__stage'));
+  const thumb = rect(document.querySelector('.curtain-configurator__thumb'));
   const sectionTop = document.querySelector('curtain-configurator').closest('.shopify-section').getBoundingClientRect().top + window.scrollY;
-  const padTop = parseFloat(getComputedStyle(document.querySelector('.cc')).paddingTop);
-  const summary = document.querySelector('.cc__summary');
-  const rows = [...document.querySelectorAll('.cc__panel > .cc__row')];
+  const padTop = parseFloat(getComputedStyle(document.querySelector('.curtain-configurator')).paddingTop);
+  const summary = document.querySelector('.curtain-configurator__summary');
+  const rows = [...document.querySelectorAll('.curtain-configurator__panel > .curtain-configurator__row')];
   return {
     thumbLeftOfStage: thumb.right <= stage.left && Math.abs(thumb.top - stage.top) < 2,
     stageHeight: Math.round(stage.height),
@@ -103,27 +103,27 @@ check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
 check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
 check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
 const badges = await page.evaluate(() => {
-  const list = document.querySelector('.cc__badges');
+  const list = document.querySelector('.curtain-configurator__badges');
   return {
-    count: list?.querySelectorAll('.cc__badge').length,
-    afterMarquee: list?.previousElementSibling?.classList.contains('cc__marquee'),
-    beforeRows: list?.nextElementSibling?.classList.contains('cc__row'),
-    titles: [...(list?.querySelectorAll('.cc__badge-title') || [])].map((el) => el.textContent.trim()),
+    count: list?.querySelectorAll('.curtain-configurator__badge').length,
+    afterMarquee: list?.previousElementSibling?.classList.contains('curtain-configurator__marquee'),
+    beforeRows: list?.nextElementSibling?.classList.contains('curtain-configurator__row'),
+    titles: [...(list?.querySelectorAll('.curtain-configurator__badge-title') || [])].map((el) => el.textContent.trim()),
   };
 });
 check('three trust badges between marquee and rows', badges.count === 3 && badges.afterMarquee && badges.beforeRows, badges.titles.join(' | '));
 
 const marquee = await page.evaluate(() => {
-  const el = document.querySelector('.cc__marquee');
-  const groups = el ? [...el.querySelectorAll('.cc__marquee-group')] : [];
-  const items = groups[0] ? [...groups[0].querySelectorAll('.cc__marquee-item')].map((li) => li.textContent.trim()) : [];
-  const clone = document.querySelector('.cc__panel').cloneNode(true);
-  clone.querySelector('.cc__marquee')?.remove();
+  const el = document.querySelector('.curtain-configurator__marquee');
+  const groups = el ? [...el.querySelectorAll('.curtain-configurator__marquee-group')] : [];
+  const items = groups[0] ? [...groups[0].querySelectorAll('.curtain-configurator__marquee-item')].map((li) => li.textContent.trim()) : [];
+  const clone = document.querySelector('.curtain-configurator__panel').cloneNode(true);
+  clone.querySelector('.curtain-configurator__marquee')?.remove();
   const rest = clone.textContent.toLowerCase();
   return {
     topMarqueeGone: !document.querySelector('.marquee'),
-    afterSummary: el?.previousElementSibling?.classList.contains('cc__summary'),
-    animated: groups.length === 2 && getComputedStyle(groups[0]).animationName === 'cc-marquee',
+    afterSummary: el?.previousElementSibling?.classList.contains('curtain-configurator__summary'),
+    animated: groups.length === 2 && getComputedStyle(groups[0]).animationName === 'curtain-marquee',
     duplicateHidden: groups[1]?.getAttribute('aria-hidden') === 'true',
     onceOnScreen: groups.length === 2 && [...groups[0].children].reduce((sum, li) => sum + li.getBoundingClientRect().width, 0) >= el.clientWidth,
     items,
@@ -134,26 +134,26 @@ const marquee = await page.evaluate(() => {
 check('top marquee removed', marquee.topMarqueeGone);
 check('minimal marquee under add to cart', marquee.afterSummary && marquee.animated && marquee.duplicateHidden && marquee.onceOnScreen, JSON.stringify(marquee));
 check('marquee wording is unique on the page', marquee.items.length > 0 && marquee.uniqueItems && marquee.repeatedElsewhere.length === 0, marquee.items.join(' | '));
-const edges = await page.locator('.cc__marquee').evaluate((el) =>
+const edges = await page.locator('.curtain-configurator__marquee').evaluate((el) =>
   ['::before', '::after'].map((pseudo) => getComputedStyle(el, pseudo).maskImage || getComputedStyle(el, pseudo).webkitMaskImage)
 );
 check('marquee has curtain rod and hem edges', edges.every((mask) => mask.includes('svg')) && edges[0].includes('circle') && edges[1].includes('path'), String(edges.length));
 
-const imageBadges = await page.locator('.cc__image-badge').evaluateAll((els) =>
-  els.map((el) => ({ text: el.textContent.trim(), onFirst: el.closest('.cc__slide') === document.querySelector('.cc__slide') }))
+const imageBadges = await page.locator('.curtain-configurator__image-badge').evaluateAll((els) =>
+  els.map((el) => ({ text: el.textContent.trim(), onFirst: el.closest('.curtain-configurator__slide') === document.querySelector('.curtain-configurator__slide') }))
 );
 check('badge on the first image only', imageBadges.length === 1 && imageBadges[0].onFirst && imageBadges[0].text === 'Custom Fit', JSON.stringify(imageBadges));
 
-const stage = page.locator('.cc__stage');
+const stage = page.locator('.curtain-configurator__stage');
 const stageBox = await stage.boundingBox();
 await page.mouse.move(stageBox.x + stageBox.width / 2, stageBox.y + stageBox.height / 2);
 await page.waitForTimeout(400);
 const zoomIn = await page.evaluate(() => {
-  const zoom = getComputedStyle(document.querySelector('.cc__zoom'));
-  return { zoomed: document.querySelector('.cc__stage').classList.contains('is-zoomed'), visible: zoom.display !== 'none' && document.querySelector('.cc__zoom').offsetWidth > 0, opacity: zoom.opacity, image: zoom.backgroundImage, size: parseFloat(zoom.backgroundSize), width: document.querySelector('.cc__stage').clientWidth };
+  const zoom = getComputedStyle(document.querySelector('.curtain-configurator__zoom'));
+  return { zoomed: document.querySelector('.curtain-configurator__stage').classList.contains('is-zoomed'), visible: zoom.display !== 'none' && document.querySelector('.curtain-configurator__zoom').offsetWidth > 0, opacity: zoom.opacity, image: zoom.backgroundImage, size: parseFloat(zoom.backgroundSize), width: document.querySelector('.curtain-configurator__stage').clientWidth };
 });
 await page.mouse.move(stageBox.x + 2, stageBox.y + 2);
-const cornerPosition = await page.locator('.cc__zoom').evaluate((el) => el.style.backgroundPosition);
+const cornerPosition = await page.locator('.curtain-configurator__zoom').evaluate((el) => el.style.backgroundPosition);
 check('hover zooms the main image', zoomIn.zoomed && zoomIn.visible && zoomIn.opacity === '1' && zoomIn.image.includes('width=2400') && zoomIn.size >= zoomIn.width * 2.5, JSON.stringify(zoomIn));
 check('zoom follows the pointer', /^0\.\d+% 0\.\d+%$|^0% 0%$/.test(cornerPosition), cornerPosition);
 await page.mouse.move(0, 0);
@@ -206,7 +206,7 @@ await setWidth(180);
 await page.waitForTimeout(100);
 check('error clears when valid', !(await page.locator('[data-width-error]').isVisible()));
 
-const activeMedia = () => page.locator('.cc__slide.is-active').getAttribute('data-media-id');
+const activeMedia = () => page.locator('.curtain-configurator__slide.is-active').getAttribute('data-media-id');
 const before = await activeMedia();
 await pickColor('Teal');
 await page.waitForTimeout(600);
@@ -228,14 +228,14 @@ check('summary for 180/200/Stone Grey', (await price()) === 'Rs.26,500.00' && (a
 const shifts = await page.evaluate(() => window.__shifts);
 check('zero layout shift during interaction', shifts.reduce((a, b) => a + b.value, 0) === 0, JSON.stringify(shifts));
 
-const openRows = () => page.locator('.cc__row').evaluateAll((rows) => rows.map((row) => row.open));
+const openRows = () => page.locator('.curtain-configurator__row').evaluateAll((rows) => rows.map((row) => row.open));
 check('all rows closed by default', (await openRows()).every((open) => !open));
-await page.locator('.cc__row-title').nth(0).click();
+await page.locator('.curtain-configurator__row-title').nth(0).click();
 await page.waitForTimeout(500);
-await page.locator('.cc__row-title').nth(1).click();
+await page.locator('.curtain-configurator__row-title').nth(1).click();
 await page.waitForTimeout(500);
 check('only one row open at a time', JSON.stringify(await openRows()) === '[false,true,false]', JSON.stringify(await openRows()));
-await page.locator('.cc__row-title').nth(1).click();
+await page.locator('.curtain-configurator__row-title').nth(1).click();
 await page.waitForTimeout(500);
 check('row closes again', (await openRows()).every((open) => !open));
 

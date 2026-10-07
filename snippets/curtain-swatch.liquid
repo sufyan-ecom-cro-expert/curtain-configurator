@@ -14,7 +14,7 @@
 {%- assign swatch_id = 'CurtainSwatch-' | append: section_id | append: '-' | append: index -%}
 <input
   type="radio"
-  class="cc__radio"
+  class="curtain-configurator__radio"
   id="{{ swatch_id }}"
   name="color"
   value="{{ value | escape }}"
@@ -22,11 +22,11 @@
     checked
   {% endif %}
 >
-<label class="cc__swatch" for="{{ swatch_id }}" {{ attributes }}>
-  <span class="cc__swatch-chip" style="--swatch: {{ color | default: '#e8e1d4' }}">
+<label class="curtain-configurator__swatch" for="{{ swatch_id }}" {{ attributes }}>
+  <span class="curtain-configurator__swatch-chip" style="--swatch: {{ color | default: '#e8e1d4' }}">
     {%- if image -%}
       {{ image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '', width: 60, height: 60 }}
     {%- endif -%}
   </span>
-  <span class="cc__swatch-name">{{ value }}</span>
+  <span class="curtain-configurator__swatch-name">{{ value }}</span>
 </label>

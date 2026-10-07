@@ -61,17 +61,17 @@
 {% style %}
   {{ heading_font | font_face: font_display: 'swap' }}
   #shopify-section-{{ section.id }} {
-    --cc-bg: {{ section.settings.background }};
-    --cc-surface: {{ section.settings.surface }};
-    --cc-text: {{ section.settings.text }};
-    --cc-accent: {{ section.settings.accent }};
-    --cc-curtain: {{ section.settings.curtain_color }};
-    --cc-heading-font: {{ heading_font.family }}, {{ heading_font.fallback_families }};
-    --cc-heading-weight: {{ heading_font.weight }};
-    --cc-pad-top: {{ section.settings.padding_top }}px;
-    --cc-pad-bottom: {{ section.settings.padding_bottom }}px;
-    --cc-gap: {{ section.settings.column_gap }}px;
-    --cc-ratio: {{ media_ratio }};
+    --curtain-bg: {{ section.settings.background }};
+    --curtain-surface: {{ section.settings.surface }};
+    --curtain-text: {{ section.settings.text }};
+    --curtain-accent: {{ section.settings.accent }};
+    --curtain-hover: {{ section.settings.curtain_color }};
+    --curtain-heading-font: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    --curtain-heading-weight: {{ heading_font.weight }};
+    --curtain-pad-top: {{ section.settings.padding_top }}px;
+    --curtain-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --curtain-gap: {{ section.settings.column_gap }}px;
+    --curtain-ratio: {{ media_ratio }};
   }
 {% endstyle %}
 
@@ -82,17 +82,17 @@
 <script>
   (() => {
     const section = document.currentScript.closest('.shopify-section');
-    section.style.setProperty('--cc-offset-top', `${section.getBoundingClientRect().top + window.scrollY}px`);
+    section.style.setProperty('--curtain-offset-top', `${section.getBoundingClientRect().top + window.scrollY}px`);
   })();
 </script>
 
-<div class="cc">
-  <curtain-configurator class="cc__inner page-width">
-    <div class="cc__gallery{% if product.media.size > 1 %} cc__gallery--thumbs{% endif %}">
-      <div class="cc__stage{% if section.settings.enable_zoom and product.media.size > 0 %} cc__stage--zoom{% endif %}">
+<div class="curtain-configurator">
+  <curtain-configurator class="curtain-configurator__inner page-width">
+    <div class="curtain-configurator__gallery{% if product.media.size > 1 %} curtain-configurator__gallery--thumbs{% endif %}">
+      <div class="curtain-configurator__stage{% if section.settings.enable_zoom and product.media.size > 0 %} curtain-configurator__stage--zoom{% endif %}">
         {%- for media in product.media -%}
           <div
-            class="cc__slide{% if media.id == active_media.id %} is-active{% endif %}"
+            class="curtain-configurator__slide{% if media.id == active_media.id %} is-active{% endif %}"
             data-media-id="{{ media.id }}"
             data-zoom-src="{{ media.preview_image | image_url: width: 2400 }}"
           >
@@ -104,32 +104,32 @@
               echo media.preview_image | image_url: width: 1600 | image_tag: widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 992px) 50vw, 100vw', loading: loading, alt: media.alt
             -%}
             {%- if forloop.first and section.settings.image_badge != blank -%}
-              <span class="cc__image-badge">{{ section.settings.image_badge }}</span>
+              <span class="curtain-configurator__image-badge">{{ section.settings.image_badge }}</span>
             {%- endif -%}
           </div>
         {%- else -%}
-          <div class="cc__slide is-active">{{ 'product-1' | placeholder_svg_tag: 'cc__placeholder' }}</div>
+          <div class="curtain-configurator__slide is-active">{{ 'product-1' | placeholder_svg_tag: 'curtain-configurator__placeholder' }}</div>
         {%- endfor -%}
 
         {%- if section.settings.enable_zoom and product.media.size > 0 -%}
-          <div class="cc__zoom" aria-hidden="true"></div>
-          <button type="button" class="cc__zoom-toggle" data-zoom-toggle aria-label="Zoom image" aria-pressed="false">
+          <div class="curtain-configurator__zoom" aria-hidden="true"></div>
+          <button type="button" class="curtain-configurator__zoom-toggle" data-zoom-toggle aria-label="Zoom image" aria-pressed="false">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
               <circle cx="10.5" cy="10.5" r="6.5"/>
               <path d="m15.5 15.5 5 5M7.5 10.5h6"/>
-              <path d="M10.5 7.5v6" class="cc__zoom-plus"/>
+              <path d="M10.5 7.5v6" class="curtain-configurator__zoom-plus"/>
             </svg>
           </button>
         {%- endif -%}
       </div>
 
       {%- if product.media.size > 1 -%}
-        <ul class="cc__thumbs" role="list">
+        <ul class="curtain-configurator__thumbs" role="list">
           {%- for media in product.media -%}
             <li>
               <button
                 type="button"
-                class="cc__thumb"
+                class="curtain-configurator__thumb"
                 data-media-target="{{ media.id }}"
                 aria-label="Show image {{ forloop.index }} of {{ forloop.length }}"
                 {% if media.id == active_media.id %}
@@ -144,33 +144,33 @@
       {%- endif -%}
     </div>
 
-    <form class="cc__panel" novalidate>
+    <form class="curtain-configurator__panel" novalidate>
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when 'vendor' -%}
-            <p class="cc__info cc__eyebrow" {{ block.shopify_attributes }}>{{ product.vendor }}</p>
+            <p class="curtain-configurator__info curtain-configurator__eyebrow" {{ block.shopify_attributes }}>{{ product.vendor }}</p>
 
           {%- when 'title' -%}
-            <h1 class="cc__info cc__title" {{ block.shopify_attributes }}>
+            <h1 class="curtain-configurator__info curtain-configurator__title" {{ block.shopify_attributes }}>
               {{- block.settings.heading | default: product.title -}}
             </h1>
 
           {%- when 'description' -%}
             {%- if product.description != blank -%}
-              <div class="cc__info cc__intro rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
+              <div class="curtain-configurator__info curtain-configurator__intro rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
             {%- endif -%}
 
           {%- when 'width' -%}
             {%- if is_ready -%}
-              <div class="cc__step" {{ block.shopify_attributes }}>
-                <label class="cc__label" for="CurtainWidth-{{ section.id }}">
-                  <span class="cc__index" aria-hidden="true"></span>
+              <div class="curtain-configurator__step" {{ block.shopify_attributes }}>
+                <label class="curtain-configurator__label" for="CurtainWidth-{{ section.id }}">
+                  <span class="curtain-configurator__index" aria-hidden="true"></span>
                   {{ block.settings.label }}
                 </label>
-                <div class="cc__width">
+                <div class="curtain-configurator__width">
                   <input
                     id="CurtainWidth-{{ section.id }}"
-                    class="cc__width-input"
+                    class="curtain-configurator__width-input"
                     type="number"
                     name="width"
                     inputmode="numeric"
@@ -181,16 +181,16 @@
                     required
                     aria-describedby="CurtainWidthHint-{{ section.id }} CurtainWidthError-{{ section.id }}"
                   >
-                  <span class="cc__unit" aria-hidden="true">cm</span>
+                  <span class="curtain-configurator__unit" aria-hidden="true">cm</span>
                 </div>
-                <div class="cc__message">
-                  <p id="CurtainWidthHint-{{ section.id }}" class="cc__hint">
+                <div class="curtain-configurator__message">
+                  <p id="CurtainWidthHint-{{ section.id }}" class="curtain-configurator__hint">
                     {{ block.settings.hint }}
                     {{ width_min }}–{{ width_max }} cm, whole numbers.
                   </p>
                   <p
                     id="CurtainWidthError-{{ section.id }}"
-                    class="cc__error"
+                    class="curtain-configurator__error"
                     data-width-error
                     hidden
                   ></p>
@@ -200,16 +200,16 @@
 
           {%- when 'drop' -%}
             {%- if is_ready -%}
-              <fieldset class="cc__step" {{ block.shopify_attributes }}>
-                <legend class="cc__label">
-                  <span class="cc__index" aria-hidden="true"></span>
+              <fieldset class="curtain-configurator__step" {{ block.shopify_attributes }}>
+                <legend class="curtain-configurator__label">
+                  <span class="curtain-configurator__index" aria-hidden="true"></span>
                   {{ block.settings.label }}
                 </legend>
-                <div class="cc__drops">
+                <div class="curtain-configurator__drops">
                   {%- for value in drop_option.values -%}
                     <input
                       type="radio"
-                      class="cc__radio"
+                      class="curtain-configurator__radio"
                       id="CurtainDrop-{{ section.id }}-{{ forloop.index }}"
                       name="drop"
                       value="{{ value.name | escape }}"
@@ -218,7 +218,7 @@
                         checked
                       {% endif %}
                     >
-                    <label class="cc__drop" for="CurtainDrop-{{ section.id }}-{{ forloop.index }}">
+                    <label class="curtain-configurator__drop" for="CurtainDrop-{{ section.id }}-{{ forloop.index }}">
                       {{- value.name -}}
                     </label>
                   {%- endfor -%}
@@ -228,13 +228,13 @@
 
           {%- when 'fabric' -%}
             {%- if is_ready -%}
-              <fieldset class="cc__step" {{ block.shopify_attributes }}>
-                <legend class="cc__label">
-                  <span class="cc__index" aria-hidden="true"></span>
+              <fieldset class="curtain-configurator__step" {{ block.shopify_attributes }}>
+                <legend class="curtain-configurator__label">
+                  <span class="curtain-configurator__index" aria-hidden="true"></span>
                   {{ block.settings.label }}
-                  <span class="cc__selected" data-selected-color>{{ selected_color }}</span>
+                  <span class="curtain-configurator__selected" data-selected-color>{{ selected_color }}</span>
                 </legend>
-                <div class="cc__swatches">
+                <div class="curtain-configurator__swatches">
                   {%- for swatch in swatch_blocks -%}
                     {%- render 'curtain-swatch',
                       section_id: section.id,
@@ -270,15 +270,15 @@
                   assign has_dates = true
                 endif
               -%}
-              <div class="cc__summary" {{ block.shopify_attributes }}>
-                <div class="cc__summary-head">
-                  <span class="cc__summary-title">{{ block.settings.title }}</span>
-                  <output class="cc__price" data-price aria-live="polite" aria-atomic="true">
+              <div class="curtain-configurator__summary" {{ block.shopify_attributes }}>
+                <div class="curtain-configurator__summary-head">
+                  <span class="curtain-configurator__summary-title">{{ block.settings.title }}</span>
+                  <output class="curtain-configurator__price" data-price aria-live="polite" aria-atomic="true">
                     {{- initial_variant.price | money -}}
                   </output>
                 </div>
 
-                <dl class="cc__specs">
+                <dl class="curtain-configurator__specs">
                   <div>
                     <dt>Width</dt>
                     <dd data-spec="width">{{ selected_width }} cm</dd>
@@ -299,38 +299,39 @@
                   {%- endif -%}
                 </dl>
 
-                <button type="submit" class="cc__submit" data-submit>
-                  <span class="cc__submit-label" data-submit-label>
+                <button type="submit" class="curtain-configurator__submit" data-submit>
+                  <span class="curtain-configurator__submit-label" data-submit-label>
                     {{- 'products.product.add_to_cart' | t }} – {{ initial_variant.price | money -}}
                   </span>
-                  <span class="cc__spinner" aria-hidden="true"></span>
+                  <span class="curtain-configurator__spinner" aria-hidden="true"></span>
                 </button>
 
-                <p class="cc__form-error" data-form-error role="alert"></p>
-
-                {%- if note != blank -%}
-                  <p
-                    class="cc__note"
-                    {% if has_dates %}
-                      data-delivery-note="{{ note | escape }}"
-                      data-min-days="{{ block.settings.delivery_min_days }}"
-                      data-max-days="{{ block.settings.delivery_max_days }}"
-                      data-working-days="{{ block.settings.delivery_working_days }}"
-                    {% endif %}
-                  >
-                    {%- unless has_dates %}{{ note }}{% endunless -%}
-                  </p>
-                {%- endif -%}
+                <div class="curtain-configurator__summary-foot">
+                  <p class="curtain-configurator__form-error" data-form-error role="alert"></p>
+                  {%- if note != blank -%}
+                    <p
+                      class="curtain-configurator__note"
+                      {% if has_dates %}
+                        data-delivery-note="{{ note | escape }}"
+                        data-min-days="{{ block.settings.delivery_min_days }}"
+                        data-max-days="{{ block.settings.delivery_max_days }}"
+                        data-working-days="{{ block.settings.delivery_working_days }}"
+                      {% endif %}
+                    >
+                      {%- unless has_dates %}{{ note }}{% endunless -%}
+                    </p>
+                  {%- endif -%}
+                </div>
               </div>
             {%- endif -%}
 
           {%- when 'marquee' -%}
             {%- assign items = block.settings.items | newline_to_br | split: '<br />' -%}
-            <div class="cc__marquee" style="--cc-marquee-speed: {{ block.settings.speed }}s" {{ block.shopify_attributes }}>
+            <div class="curtain-configurator__marquee" style="--curtain-marquee-speed: {{ block.settings.speed }}s" {{ block.shopify_attributes }}>
               {%- comment -%} The second group is a copy that slides in behind the first for a seamless loop. {%- endcomment -%}
               {%- for group in (1..2) -%}
                 <ul
-                  class="cc__marquee-group"
+                  class="curtain-configurator__marquee-group"
                   role="list"
                   {% if group == 2 %}
                     aria-hidden="true"
@@ -339,7 +340,7 @@
                   {%- for item in items -%}
                     {%- assign text = item | strip -%}
                     {%- if text != blank -%}
-                      <li class="cc__marquee-item">{{ text }}</li>
+                      <li class="curtain-configurator__marquee-item">{{ text }}</li>
                     {%- endif -%}
                   {%- endfor -%}
                 </ul>
@@ -347,7 +348,7 @@
             </div>
 
           {%- when 'trust_badges' -%}
-            <ul class="cc__badges" role="list" {{ block.shopify_attributes }}>
+            <ul class="curtain-configurator__badges" role="list" {{ block.shopify_attributes }}>
               {%- for i in (1..3) -%}
                 {%- liquid
                   assign title_key = 'title_' | append: i
@@ -355,11 +356,11 @@
                   assign icon_key = 'icon_' | append: i
                 -%}
                 {%- if block.settings[title_key] != blank -%}
-                  <li class="cc__badge">
+                  <li class="curtain-configurator__badge">
                     {%- render 'curtain-trust-icon', icon: block.settings[icon_key] -%}
-                    <span class="cc__badge-title">{{ block.settings[title_key] }}</span>
+                    <span class="curtain-configurator__badge-title">{{ block.settings[title_key] }}</span>
                     {%- if block.settings[text_key] != blank -%}
-                      <span class="cc__badge-text">{{ block.settings[text_key] }}</span>
+                      <span class="curtain-configurator__badge-text">{{ block.settings[text_key] }}</span>
                     {%- endif -%}
                   </li>
                 {%- endif -%}
@@ -368,23 +369,23 @@
 
           {%- when 'collapsible_row' -%}
             <details
-              class="cc__row{% if block.settings.open %} is-open{% endif %}"
+              class="curtain-configurator__row{% if block.settings.open %} is-open{% endif %}"
               {% if block.settings.open %}
                 open
               {% endif %}
               {{ block.shopify_attributes }}
             >
-              <summary class="cc__row-title">
+              <summary class="curtain-configurator__row-title">
                 {{- block.settings.heading -}}
-                <span class="cc__row-icon" aria-hidden="true"></span>
+                <span class="curtain-configurator__row-icon" aria-hidden="true"></span>
               </summary>
-              <div class="cc__row-content rte">{{ block.settings.content }}</div>
+              <div class="curtain-configurator__row-content rte">{{ block.settings.content }}</div>
             </details>
         {%- endcase -%}
       {%- endfor -%}
 
       {%- if is_ready == false and request.design_mode -%}
-        <p class="cc__notice">
+        <p class="curtain-configurator__notice">
           Link Curtain Pricing Tier entries to this product's <code>custom.pricing_tiers</code> metafield and make sure
           the product has {{ section.settings.color_option }}, {{ section.settings.drop_option }} and
           {{ section.settings.panel_option }} options.

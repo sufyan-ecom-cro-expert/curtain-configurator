@@ -201,6 +201,7 @@ Dawn already hides underscore properties in both cart templates, so no change wa
 - **Stable text boxes.** The price, the summary values and the button label sit in boxes that don't change size when their text changes. Numbers use tabular figures.
 - **Reserved note height.** The delivery note keeps room for its text before the script fills in the dates, two lines on mobile.
 - **Empty placeholders stay visible.** Dawn hides every empty `div` and `p`. The delivery note, the cart error line and the zoom layer start empty, so the section forces them to display and keeps their space.
+- **Shared message slot.** The cart error line and the delivery note sit in the same grid cell. An error covers the note while it shows, so nothing below moves.
 - **First paint.** The first price is rendered by Liquid, so nothing moves when the script runs.
 - **Animation.** Price changes animate with `opacity` and `transform` only.
 
