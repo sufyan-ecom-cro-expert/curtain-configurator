@@ -253,7 +253,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 60 checks against a live preview:
+`tests/e2e/run.mjs` runs 61 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.

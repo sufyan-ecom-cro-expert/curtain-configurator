@@ -73,28 +73,11 @@
             "delivery_working_days": true
           }
         },
-        "row_measure": {
-          "type": "collapsible_row",
+        "marquee": {
+          "type": "marquee",
           "settings": {
-            "heading": "How to measure",
-            "content": "<p>Measure the full length of your track or pole in centimetres and enter it as the width. For a pole, measure between the finials. Choose the drop that ends where you want the curtain to fall.</p>",
-            "open": false
-          }
-        },
-        "row_panels": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Why the price changes with width",
-            "content": "<p>Wider windows need more fabric panels sewn together for a full, even drape. We work out the panel count from your width, so you only pay for the fabric your window needs.</p>",
-            "open": false
-          }
-        },
-        "row_delivery": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Delivery",
-            "content": "<p>Every curtain is cut and sewn to order and dispatched within 7 to 10 working days.</p>",
-            "open": false
+            "items": "Quiet luxury for every room\nDesigned to frame the view\nEffortless elegance\nCrafted with care",
+            "speed": 24
           }
         },
         "trust_badges": {
@@ -111,11 +94,28 @@
             "text_3": "Checked before dispatch"
           }
         },
-        "marquee": {
-          "type": "marquee",
+        "row_measure": {
+          "type": "collapsible_row",
           "settings": {
-            "items": "Quiet luxury for every room\nDesigned to frame the view\nEffortless elegance\nCrafted with care",
-            "speed": 24
+            "heading": "How to measure",
+            "content": "<p>Measure the full length of your track or pole in centimetres and enter it as the width. For a pole, measure between the finials. Choose the drop that ends where you want the curtain to fall.</p>",
+            "open": false
+          }
+        },
+        "row_care": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Fabric care",
+            "content": "<p>Shake out or vacuum gently with a soft brush attachment to keep dust away. Treat small marks with a damp cloth, and choose professional dry cleaning for a deeper clean so the folds keep their shape.</p>",
+            "open": false
+          }
+        },
+        "row_hanging": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Hanging your curtains",
+            "content": "<p>Hang the curtains from track gliders or pole rings using standard curtain hooks. Leave a gap of 1 to 2 cm between the hem and the floor so they move freely and stay clean.</p>",
+            "open": false
           }
         }
       },
@@ -132,8 +132,8 @@
         "marquee",
         "trust_badges",
         "row_measure",
-        "row_panels",
-        "row_delivery"
+        "row_care",
+        "row_hanging"
       ],
       "settings": {
         "media_ratio": "square",

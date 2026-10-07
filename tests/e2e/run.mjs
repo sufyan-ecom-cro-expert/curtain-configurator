@@ -102,6 +102,8 @@ const layout = await page.evaluate(() => {
 check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
 check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
 check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
+const rowTitles = await page.locator('.cc__row-title').evaluateAll((els) => els.map((el) => el.textContent.trim()));
+check('row titles', JSON.stringify(rowTitles) === JSON.stringify(['How to measure', 'Fabric care', 'Hanging your curtains']), rowTitles.join(' | '));
 const badges = await page.evaluate(() => {
   const list = document.querySelector('.cc__badges');
   return {
