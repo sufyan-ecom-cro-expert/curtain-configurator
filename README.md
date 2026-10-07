@@ -228,7 +228,7 @@ Every part of the product column is its own block, so it can be reordered, remov
 | Fabric picker | Label | Shows the Fabric swatch blocks, or the Color values if there are none |
 | Fabric swatch | Color option value, swatch color, optional fabric image | One per color. The value must match the variant's Color value exactly |
 | Price and add to cart | Title, panel count visibility, note, delivery days, working days only | The summary card and button |
-| Marquee | Items, one per line, and seconds per loop | A slim scrolling strip under the add to cart card. Pauses on hover |
+| Marquee | Items, one per line, and seconds per loop | A slim scrolling strip under the add to cart card, edged like a curtain with a ringed rod on top and a scalloped hem below. Pauses on hover |
 | Trust badges | Icon, title and text for up to three badges | Sits under the marquee. A badge with an empty title is hidden |
 | Collapsible row | Heading, content, open by default | Add as many as needed. The template has three under the button, all closed |
 
@@ -252,7 +252,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 59 checks against a live preview:
+`tests/e2e/run.mjs` runs 60 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.

@@ -134,6 +134,10 @@ const marquee = await page.evaluate(() => {
 check('top marquee removed', marquee.topMarqueeGone);
 check('minimal marquee under add to cart', marquee.afterSummary && marquee.animated && marquee.duplicateHidden && marquee.onceOnScreen, JSON.stringify(marquee));
 check('marquee wording is unique on the page', marquee.items.length > 0 && marquee.uniqueItems && marquee.repeatedElsewhere.length === 0, marquee.items.join(' | '));
+const edges = await page.locator('.cc__marquee').evaluate((el) =>
+  ['::before', '::after'].map((pseudo) => getComputedStyle(el, pseudo).maskImage || getComputedStyle(el, pseudo).webkitMaskImage)
+);
+check('marquee has curtain rod and hem edges', edges.every((mask) => mask.includes('svg')) && edges[0].includes('circle') && edges[1].includes('path'), String(edges.length));
 
 const imageBadges = await page.locator('.cc__image-badge').evaluateAll((els) =>
   els.map((el) => ({ text: el.textContent.trim(), onFirst: el.closest('.cc__slide') === document.querySelector('.cc__slide') }))
