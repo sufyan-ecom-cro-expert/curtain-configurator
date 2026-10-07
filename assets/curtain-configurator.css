@@ -1,9 +1,7 @@
 .cc {
   --cc-muted: color-mix(in srgb, var(--cc-text) 62%, transparent);
   --cc-line: color-mix(in srgb, var(--cc-text) 14%, transparent);
-  --cc-soft: color-mix(in srgb, var(--cc-accent) 8%, var(--cc-surface));
   --cc-error: #a23b2a;
-  --cc-radius: 1.4rem;
   --cc-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   background: var(--cc-bg);
@@ -37,9 +35,8 @@
 .cc__stage {
   position: relative;
   aspect-ratio: var(--cc-ratio);
-  border-radius: var(--cc-radius);
   overflow: hidden;
-  background: color-mix(in srgb, var(--cc-text) 6%, var(--cc-bg));
+  background: var(--cc-surface);
 }
 
 .cc__slide {
@@ -79,7 +76,6 @@
   aspect-ratio: 1;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 0.8rem;
   overflow: hidden;
   background: none;
   cursor: pointer;
@@ -208,7 +204,6 @@
   height: 6.4rem;
   padding: 0 6rem 0 2rem;
   border: 1px solid var(--cc-line);
-  border-radius: 1rem;
   background: var(--cc-surface);
   color: var(--cc-text);
   font: inherit;
@@ -291,7 +286,6 @@
   place-items: center;
   height: 5.2rem;
   border: 1px solid var(--cc-line);
-  border-radius: 1rem;
   background: var(--cc-surface);
   font-size: 1.5rem;
   font-variant-numeric: tabular-nums;
@@ -335,7 +329,6 @@
   display: block;
   width: 5.2rem;
   height: 5.2rem;
-  border-radius: 50%;
   overflow: hidden;
   background: var(--swatch);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 0 3px var(--cc-bg), 0 0 0 4px transparent;
@@ -374,7 +367,6 @@
   display: grid;
   gap: 2rem;
   padding: 2.8rem;
-  border-radius: var(--cc-radius);
   background: var(--cc-surface);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 40px -24px rgba(0, 0, 0, 0.25);
 }
@@ -409,14 +401,13 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   margin: 0;
-  border-radius: 1rem;
   overflow: hidden;
   background: var(--cc-line);
 }
 
 .cc__specs div {
   padding: 1.2rem 1.4rem;
-  background: var(--cc-soft);
+  background: var(--cc-bg);
 }
 
 .cc__specs dt {
@@ -443,7 +434,6 @@
   height: 5.8rem;
   padding: 0 2rem;
   border: 0;
-  border-radius: 99rem;
   background: var(--cc-accent);
   color: #fff;
   font: inherit;
@@ -523,7 +513,6 @@
 .cc__notice {
   padding: 1.6rem;
   border: 1px dashed var(--cc-line);
-  border-radius: 1rem;
   font-size: 1.4rem;
 }
 

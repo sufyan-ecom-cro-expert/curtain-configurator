@@ -215,7 +215,7 @@ The end-to-end test records every `layout-shift` entry during the interactions a
 
 - **Content:** heading, vendor, description, panel count visibility, the note under the button, and image ratio.
 - **Configuration:** default width, and the names of the Color, Drop and Panels options.
-- **Style:** heading font, background, card, text and accent colors.
+- **Style:** heading font, background (white by default), alternative background (#F7F7F7, used for the summary card, inputs and image backdrop), text and accent colors.
 - **Spacing:** top and bottom padding, and the column gap.
 - **Blocks:** one Fabric swatch block per color, with an option value, a color and an optional fabric image.
 
