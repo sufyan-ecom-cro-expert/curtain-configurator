@@ -348,6 +348,8 @@ for (const [name, width, height] of [
       const first = thumbs.children[0].getBoundingClientRect();
       const second = thumbs.children[1].getBoundingClientRect();
       return {
+        stageLeft: Math.round(stage.left),
+        stageTopGap: Math.round(stage.top - document.querySelector('curtain-configurator').getBoundingClientRect().top),
         stageRight: Math.round(stage.right),
         thumbsRight: Math.round(thumbs.getBoundingClientRect().right),
         viewport: document.documentElement.clientWidth,
@@ -356,8 +358,8 @@ for (const [name, width, height] of [
       };
     });
     check(
-      'mobile: gallery reaches the right edge with tight gaps',
-      gallery.stageRight === gallery.viewport && gallery.thumbsRight === gallery.viewport && gallery.imageToThumbs <= 6 && gallery.thumbGap <= 6,
+      'mobile: gallery is edge to edge, flush to the top, with tight gaps',
+      gallery.stageLeft === 0 && gallery.stageTopGap === 0 && gallery.stageRight === gallery.viewport && gallery.thumbsRight === gallery.viewport && gallery.imageToThumbs <= 6 && gallery.thumbGap <= 6,
       JSON.stringify(gallery)
     );
   }

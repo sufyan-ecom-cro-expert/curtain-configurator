@@ -900,11 +900,15 @@ curtain-configurator :focus-visible {
     padding-inline: 1.6rem;
   }
 
-  /* The negative margin cancels the container's right padding so the gallery runs to the screen edge. */
+  /* The gallery comes first on mobile, so it sits flush under the header and edge to edge. */
+  curtain-configurator {
+    padding-top: 0;
+  }
+
   .cc__gallery {
     position: static;
     gap: 0.6rem;
-    margin-right: -1.6rem;
+    margin-inline: -1.6rem;
   }
 
   .cc__gallery--thumbs {
