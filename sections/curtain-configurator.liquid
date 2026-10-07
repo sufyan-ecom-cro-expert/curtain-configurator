@@ -89,11 +89,12 @@
 <div class="cc">
   <curtain-configurator class="cc__inner page-width">
     <div class="cc__gallery{% if product.media.size > 1 %} cc__gallery--thumbs{% endif %}">
-      <div class="cc__stage">
+      <div class="cc__stage{% if section.settings.enable_zoom and product.media.size > 0 %} cc__stage--zoom{% endif %}">
         {%- for media in product.media -%}
           <div
             class="cc__slide{% if media.id == active_media.id %} is-active{% endif %}"
             data-media-id="{{ media.id }}"
+            data-zoom-src="{{ media.preview_image | image_url: width: 2400 }}"
           >
             {%- liquid
               assign loading = 'lazy'
@@ -102,10 +103,24 @@
               endif
               echo media.preview_image | image_url: width: 1600 | image_tag: widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 992px) 50vw, 100vw', loading: loading, alt: media.alt
             -%}
+            {%- if forloop.first and section.settings.image_badge != blank -%}
+              <span class="cc__image-badge">{{ section.settings.image_badge }}</span>
+            {%- endif -%}
           </div>
         {%- else -%}
           <div class="cc__slide is-active">{{ 'product-1' | placeholder_svg_tag: 'cc__placeholder' }}</div>
         {%- endfor -%}
+
+        {%- if section.settings.enable_zoom and product.media.size > 0 -%}
+          <div class="cc__zoom" aria-hidden="true"></div>
+          <button type="button" class="cc__zoom-toggle" data-zoom-toggle aria-label="Zoom image" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+              <circle cx="10.5" cy="10.5" r="6.5"/>
+              <path d="m15.5 15.5 5 5M7.5 10.5h6"/>
+              <path d="M10.5 7.5v6" class="cc__zoom-plus"/>
+            </svg>
+          </button>
+        {%- endif -%}
       </div>
 
       {%- if product.media.size > 1 -%}
@@ -458,6 +473,20 @@
         }
       ],
       "default": "portrait"
+    },
+    {
+      "type": "text",
+      "id": "image_badge",
+      "label": "Image badge",
+      "info": "Shown on the first image. Leave blank to hide.",
+      "default": "Bespoke"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable image zoom",
+      "info": "Hover to zoom on desktop. Tap to zoom on touch screens.",
+      "default": true
     },
     {
       "type": "header",

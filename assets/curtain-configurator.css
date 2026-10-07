@@ -17,6 +17,13 @@
   padding-inline: 5rem;
 }
 
+/* Dawn hides empty elements. These start empty but must keep their space. */
+.cc .cc__zoom,
+.cc .cc__note,
+.cc .cc__form-error {
+  display: block;
+}
+
 .cc :focus-visible {
   outline: 2px solid var(--cc-accent);
   outline-offset: 3px;
@@ -70,6 +77,68 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.cc__image-badge {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.6rem;
+  padding: 0.8rem 1.2rem;
+  background: var(--cc-bg);
+  color: var(--cc-text);
+  font-size: 1.1rem;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Zoom: a high-resolution copy of the active image, positioned under the pointer. */
+.cc__stage--zoom {
+  cursor: zoom-in;
+}
+
+.cc__stage.is-zoomed {
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.cc__zoom {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-repeat: no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.cc__stage.is-zoomed .cc__zoom {
+  opacity: 1;
+}
+
+.cc__zoom-toggle {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  border: 0;
+  background: var(--cc-bg);
+  color: var(--cc-text);
+  cursor: pointer;
+}
+
+.cc__zoom-toggle svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.cc__zoom-toggle[aria-pressed='true'] .cc__zoom-plus {
+  display: none;
 }
 
 /* Zero height plus min-height: 100% lets the stage set the row height; extra thumbnails scroll. */

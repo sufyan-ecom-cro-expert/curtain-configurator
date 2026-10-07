@@ -200,6 +200,7 @@ Dawn already hides underscore properties in both cart templates, so no change wa
 - **Reserved message slot.** The hint and the validation error share one grid cell. Errors toggle visibility instead of being inserted.
 - **Stable text boxes.** The price, the summary values and the button label sit in boxes that don't change size when their text changes. Numbers use tabular figures.
 - **Reserved note height.** The delivery note keeps room for its text before the script fills in the dates, two lines on mobile.
+- **Empty placeholders stay visible.** Dawn hides every empty `div` and `p`. The delivery note, the cart error line and the zoom layer start empty, so the section forces them to display and keeps their space.
 - **First paint.** The first price is rendered by Liquid, so nothing moves when the script runs.
 - **Animation.** Price changes animate with `opacity` and `transform` only.
 
@@ -240,7 +241,9 @@ The step numbers 01, 02 and 03 come from a CSS counter, so they follow the block
 **Delivery dates.** The note in the add to cart block can contain `[start]` and `[end]`. The script fills them with dates counted from today, for example "Made to order · Ships 16 October to 21 October". The earliest and latest day counts are settings, and weekends can be skipped. The dates are worked out in the browser, because Shopify may serve a cached page rendered on an earlier day.
 
 **Section settings.**
-- **Gallery:** image ratio. On desktop the main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies, and on mobile the thumbnails move under the image.
+- **Gallery:** image ratio, a badge on the first image ("Bespoke" by default, blank to hide), and image zoom. On desktop the main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies, and on mobile the thumbnails move under the image.
+
+**Image zoom.** On desktop, hovering the main image shows a 2.5x magnified copy that follows the pointer. On touch screens, a tap zooms in at that point, dragging pans, and a second tap zooms out. A magnifier button in the corner toggles zoom for keyboard and touch users, and Escape closes it. The magnified copy is a 2400px version of the image, loaded only when zoom is first used.
 - **Configuration:** default width, and the names of the Color, Drop and Panels options.
 - **Style:** heading font, background, alternative background for the summary card, inputs and image backdrop, text, accent, and the button hover curtain color.
 - **Spacing:** top and bottom padding, and the column gap.
@@ -249,7 +252,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 53 checks against a live preview:
+`tests/e2e/run.mjs` runs 59 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
@@ -259,6 +262,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 - **Layout:** thumbnails to the left of the main image, the main image filling the screen below the header, three collapsible rows under the button, zero layout shift, and no horizontal overflow at tablet and mobile widths.
 - **Interaction:** rows start closed and only one opens at a time, and the button curtain covers the button on hover.
 - **Trust badges:** three badges sit between the add to cart card and the rows.
+- **Image:** the badge sits on the first image only, hover zoom follows the pointer and ends on leave, and the zoom button works from the keyboard.
 - **Marquee:** it sits under the add to cart card, animates, and shows each phrase once on screen. None of its phrases repeat each other or any other text in the section.
 - **Cart:** the exact `/cart/add.js` payload, the drawer contents, the cart page contents, and the cart line read back from `/cart.js`.
 - **Errors:** a simulated 422 response and a simulated network failure.

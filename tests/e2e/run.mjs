@@ -27,7 +27,17 @@ await page.fill('input[type="password"]', password);
 await Promise.all([page.waitForLoadState('load'), page.press('input[type="password"]', 'Enter')]);
 await page.waitForTimeout(1500);
 
+await page.addInitScript(() => {
+  window.__loadShifts = 0;
+  new PerformanceObserver((list) => list.getEntries().forEach((e) => (window.__loadShifts += e.value))).observe({ type: 'layout-shift', buffered: true });
+});
 await page.goto(`${STORE}${PDP}`, { waitUntil: 'load' });
+await page.waitForTimeout(1500);
+const loadShifts = await page.evaluate(() => {
+  const cc = document.querySelector('.cc');
+  return { total: window.__loadShifts, note: getComputedStyle(document.querySelector('.cc__note')).display, error: getComputedStyle(document.querySelector('.cc__form-error')).display };
+});
+check('reserved slots are not hidden by Dawn', loadShifts.note === 'block' && loadShifts.error === 'block', JSON.stringify(loadShifts));
 await page.evaluate(() => {
   window.__shifts = [];
   new PerformanceObserver((list) => list.getEntries().forEach((e) => window.__shifts.push({ value: e.value, sources: e.sources.map((s) => s.node?.className || s.node?.nodeName) }))).observe({
@@ -124,6 +134,33 @@ const marquee = await page.evaluate(() => {
 check('top marquee removed', marquee.topMarqueeGone);
 check('minimal marquee under add to cart', marquee.afterSummary && marquee.animated && marquee.duplicateHidden && marquee.onceOnScreen, JSON.stringify(marquee));
 check('marquee wording is unique on the page', marquee.items.length > 0 && marquee.uniqueItems && marquee.repeatedElsewhere.length === 0, marquee.items.join(' | '));
+
+const imageBadges = await page.locator('.cc__image-badge').evaluateAll((els) =>
+  els.map((el) => ({ text: el.textContent.trim(), onFirst: el.closest('.cc__slide') === document.querySelector('.cc__slide') }))
+);
+check('badge on the first image only', imageBadges.length === 1 && imageBadges[0].onFirst && imageBadges[0].text === 'Bespoke', JSON.stringify(imageBadges));
+
+const stage = page.locator('.cc__stage');
+const stageBox = await stage.boundingBox();
+await page.mouse.move(stageBox.x + stageBox.width / 2, stageBox.y + stageBox.height / 2);
+await page.waitForTimeout(400);
+const zoomIn = await page.evaluate(() => {
+  const zoom = getComputedStyle(document.querySelector('.cc__zoom'));
+  return { zoomed: document.querySelector('.cc__stage').classList.contains('is-zoomed'), visible: zoom.display !== 'none' && document.querySelector('.cc__zoom').offsetWidth > 0, opacity: zoom.opacity, image: zoom.backgroundImage, size: parseFloat(zoom.backgroundSize), width: document.querySelector('.cc__stage').clientWidth };
+});
+await page.mouse.move(stageBox.x + 2, stageBox.y + 2);
+const cornerPosition = await page.locator('.cc__zoom').evaluate((el) => el.style.backgroundPosition);
+check('hover zooms the main image', zoomIn.zoomed && zoomIn.visible && zoomIn.opacity === '1' && zoomIn.image.includes('width=2400') && zoomIn.size >= zoomIn.width * 2.5, JSON.stringify(zoomIn));
+check('zoom follows the pointer', /^0\.\d+% 0\.\d+%$|^0% 0%$/.test(cornerPosition), cornerPosition);
+await page.mouse.move(0, 0);
+await page.waitForTimeout(300);
+check('zoom ends when the pointer leaves', !(await stage.evaluate((el) => el.classList.contains('is-zoomed'))));
+
+await page.locator('[data-zoom-toggle]').focus();
+await page.keyboard.press('Enter');
+const keyboardZoom = await page.locator('[data-zoom-toggle]').getAttribute('aria-pressed');
+await page.keyboard.press('Escape');
+check('zoom button works from the keyboard', keyboardZoom === 'true' && (await page.locator('[data-zoom-toggle]').getAttribute('aria-pressed')) === 'false');
 
 check('initial price', (await price()) === 'Rs.22,000.00', await price());
 check('initial label', (await label()).includes('Rs.22,000.00'), await label());

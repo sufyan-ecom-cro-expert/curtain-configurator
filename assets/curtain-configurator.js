@@ -17,6 +17,8 @@ const addDays = (days, workingDaysOnly) => {
 };
 
 
+const ZOOM_SCALE = 2.5;
+
 const formatDay = (date) =>
   `${date.getDate()} ${date.toLocaleDateString(document.documentElement.lang || undefined, { month: 'long' })}`;
 
@@ -25,6 +27,7 @@ class CurtainConfigurator extends HTMLElement {
     this.querySelectorAll('[data-media-target]').forEach((thumb) =>
       thumb.addEventListener('click', () => this.showMedia(thumb.dataset.mediaTarget))
     );
+    this.setupZoom();
     this.section = this.closest('.shopify-section');
     this.onResize = () =>
       this.section.style.setProperty('--cc-offset-top', `${this.section.getBoundingClientRect().top + window.scrollY}px`);
@@ -79,6 +82,48 @@ class CurtainConfigurator extends HTMLElement {
     const start = addDays(Number(minDays), workingDaysOnly);
     const end = addDays(Math.max(Number(minDays), Number(maxDays)), workingDaysOnly);
     note.textContent = deliveryNote.replace('[start]', formatDay(start)).replace('[end]', formatDay(end));
+  }
+
+  // Mouse: zoom while hovering. Touch and pen: tap to toggle, drag to pan. The button works for everyone.
+  setupZoom() {
+    this.stage = this.querySelector('.cc__stage');
+    this.zoom = this.querySelector('.cc__zoom');
+    this.zoomToggle = this.querySelector('[data-zoom-toggle]');
+    if (!this.zoom) return;
+
+    this.stage.addEventListener('pointerdown', (event) => (this.pointerType = event.pointerType));
+    this.stage.addEventListener('pointerenter', (event) => event.pointerType === 'mouse' && this.setZoom(true, event));
+    this.stage.addEventListener('pointerleave', (event) => event.pointerType === 'mouse' && this.setZoom(false));
+    this.stage.addEventListener('pointermove', (event) => this.zoomed && this.moveZoom(event));
+    this.stage.addEventListener('click', (event) => {
+      if (this.pointerType !== 'mouse' && !event.target.closest('[data-zoom-toggle]')) this.setZoom(!this.zoomed, event);
+    });
+    this.zoomToggle.addEventListener('click', () => this.setZoom(!this.zoomed));
+    this.zoomToggle.addEventListener('keydown', (event) => event.key === 'Escape' && this.setZoom(false));
+  }
+
+  setZoom(on, event) {
+    const slide = this.querySelector('.cc__slide.is-active[data-zoom-src]');
+    if (on && !slide) return;
+
+    this.zoomed = on;
+    if (on) {
+      // Size the copy like object-fit: cover, then enlarge it.
+      const image = slide.querySelector('img');
+      const stage = this.stage.getBoundingClientRect();
+      const coverWidth = Math.max(stage.width, stage.height * (image.naturalWidth / image.naturalHeight || 1));
+      this.zoom.style.backgroundImage = `url("${slide.dataset.zoomSrc}")`;
+      this.zoom.style.backgroundSize = `${coverWidth * ZOOM_SCALE}px auto`;
+      this.moveZoom(event);
+    }
+    this.stage.classList.toggle('is-zoomed', on);
+    this.zoomToggle.setAttribute('aria-pressed', on);
+  }
+
+  moveZoom(event) {
+    const stage = this.stage.getBoundingClientRect();
+    const percent = (value, start, size) => (event ? Math.min(100, Math.max(0, ((value - start) / size) * 100)) : 50);
+    this.zoom.style.backgroundPosition = `${percent(event?.clientX, stage.left, stage.width)}% ${percent(event?.clientY, stage.top, stage.height)}%`;
   }
 
   disconnectedCallback() {
@@ -214,6 +259,7 @@ class CurtainConfigurator extends HTMLElement {
 
   showMedia(mediaId) {
     if (!mediaId) return;
+    if (this.zoomed) this.setZoom(false);
     this.querySelectorAll('[data-media-id]').forEach((slide) =>
       slide.classList.toggle('is-active', slide.dataset.mediaId === String(mediaId))
     );
