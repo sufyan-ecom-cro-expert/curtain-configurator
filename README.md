@@ -4,6 +4,11 @@ A product page section for Shopify's Dawn theme (16.0.0). The customer types a w
 
 Prices and width ranges are stored in a metaobject, not in the code.
 
+## Live preview
+
+- Store: https://developertestingforyou.myshopify.com/products/made-to-measure-curtain
+- Password: `smile`
+
 ![Product page](docs/screenshots/pdp-desktop.png)
 
 ## Files
