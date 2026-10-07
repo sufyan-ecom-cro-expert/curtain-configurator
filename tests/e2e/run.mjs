@@ -91,6 +91,16 @@ const layout = await page.evaluate(() => {
 check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
 check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
 check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
+const badges = await page.evaluate(() => {
+  const list = document.querySelector('.cc__badges');
+  return {
+    count: list?.querySelectorAll('.cc__badge').length,
+    afterSummary: list?.previousElementSibling?.classList.contains('cc__summary'),
+    beforeRows: list?.nextElementSibling?.classList.contains('cc__row'),
+    titles: [...(list?.querySelectorAll('.cc__badge-title') || [])].map((el) => el.textContent.trim()),
+  };
+});
+check('three trust badges between add to cart and rows', badges.count === 3 && badges.afterSummary && badges.beforeRows, badges.titles.join(' | '));
 
 check('initial price', (await price()) === 'Rs.22,000.00', await price());
 check('initial label', (await label()).includes('Rs.22,000.00'), await label());

@@ -303,6 +303,26 @@
               </div>
             {%- endif -%}
 
+          {%- when 'trust_badges' -%}
+            <ul class="cc__badges" role="list" {{ block.shopify_attributes }}>
+              {%- for i in (1..3) -%}
+                {%- liquid
+                  assign title_key = 'title_' | append: i
+                  assign text_key = 'text_' | append: i
+                  assign icon_key = 'icon_' | append: i
+                -%}
+                {%- if block.settings[title_key] != blank -%}
+                  <li class="cc__badge">
+                    {%- render 'curtain-trust-icon', icon: block.settings[icon_key] -%}
+                    <span class="cc__badge-title">{{ block.settings[title_key] }}</span>
+                    {%- if block.settings[text_key] != blank -%}
+                      <span class="cc__badge-text">{{ block.settings[text_key] }}</span>
+                    {%- endif -%}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+
           {%- when 'collapsible_row' -%}
             <details
               class="cc__row{% if block.settings.open %} is-open{% endif %}"
@@ -665,6 +685,160 @@
           "label": "Count working days only",
           "info": "Skips Saturdays and Sundays.",
           "default": true
+        }
+      ]
+    },
+    {
+      "type": "trust_badges",
+      "name": "Trust badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Badge 1"
+        },
+        {
+          "type": "select",
+          "id": "icon_1",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "scissors",
+              "label": "Scissors"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "return",
+              "label": "Return"
+            }
+          ],
+          "default": "ruler"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title",
+          "default": "Made to measure",
+          "info": "Leave blank to hide this badge."
+        },
+        {
+          "type": "text",
+          "id": "text_1",
+          "label": "Text",
+          "default": "Cut to your exact width"
+        },
+        {
+          "type": "header",
+          "content": "Badge 2"
+        },
+        {
+          "type": "select",
+          "id": "icon_2",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "scissors",
+              "label": "Scissors"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "return",
+              "label": "Return"
+            }
+          ],
+          "default": "lock"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title",
+          "default": "Secure checkout",
+          "info": "Leave blank to hide this badge."
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "label": "Text",
+          "default": "Encrypted payments"
+        },
+        {
+          "type": "header",
+          "content": "Badge 3"
+        },
+        {
+          "type": "select",
+          "id": "icon_3",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "scissors",
+              "label": "Scissors"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "return",
+              "label": "Return"
+            }
+          ],
+          "default": "scissors"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Title",
+          "default": "Sewn to order",
+          "info": "Leave blank to hide this badge."
+        },
+        {
+          "type": "text",
+          "id": "text_3",
+          "label": "Text",
+          "default": "Checked before dispatch"
         }
       ]
     },

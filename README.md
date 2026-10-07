@@ -12,6 +12,7 @@ All pricing data lives in a metaobject. The theme code contains no width ranges 
 | --- | --- |
 | `sections/curtain-configurator.liquid` | The section: gallery, inputs, summary card, and the JSON config read from the metafield |
 | `snippets/curtain-swatch.liquid` | One fabric swatch radio, used by swatch blocks and by the fallback |
+| `snippets/curtain-trust-icon.liquid` | Line icons for the trust badges |
 | `assets/curtain-configurator.js` | The `<curtain-configurator>` custom element (vanilla ES2020, no libraries) |
 | `assets/curtain-configurator.css` | Styles, loaded only by this section |
 | `templates/product.curtain.json` | Product template with the configurator blocks and three collapsible rows |
@@ -226,6 +227,7 @@ Every part of the product column is its own block, so it can be reordered, remov
 | Fabric picker | Label | Shows the Fabric swatch blocks, or the Color values if there are none |
 | Fabric swatch | Color option value, swatch color, optional fabric image | One per color. The value must match the variant's Color value exactly |
 | Price and add to cart | Title, panel count visibility, note, delivery days, working days only | The summary card and button |
+| Trust badges | Icon, title and text for up to three badges | Sits under the add to cart card. A badge with an empty title is hidden |
 | Collapsible row | Heading, content, open by default | Add as many as needed. The template has three under the button, all closed |
 
 Collapsible rows slide open and closed, and only one stays open at a time. Opening a row closes any other open row. Selecting a row's block in the theme editor opens it.
@@ -246,7 +248,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 49 checks against a live preview:
+`tests/e2e/run.mjs` runs 50 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
@@ -255,6 +257,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 - **Interaction:** color swaps the gallery image, and arrow keys move through the swatches.
 - **Layout:** thumbnails to the left of the main image, the main image filling the screen below the header, three collapsible rows under the button, zero layout shift, and no horizontal overflow at tablet and mobile widths.
 - **Interaction:** rows start closed and only one opens at a time, and the button curtain covers the button on hover.
+- **Trust badges:** three badges sit between the add to cart card and the rows.
 - **Cart:** the exact `/cart/add.js` payload, the drawer contents, the cart page contents, and the cart line read back from `/cart.js`.
 - **Errors:** a simulated 422 response and a simulated network failure.
 

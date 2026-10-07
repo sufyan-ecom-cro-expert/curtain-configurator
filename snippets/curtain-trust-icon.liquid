@@ -1,0 +1,40 @@
+{%- comment -%}
+  Renders a line icon for the curtain configurator trust badges.
+
+  Accepts:
+  - icon {String} ruler, scissors, lock, shield, truck or return
+{%- endcomment -%}
+
+<svg
+  class="cc__badge-icon"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.4"
+  stroke-linejoin="miter"
+  aria-hidden="true"
+  focusable="false"
+>
+  {%- case icon -%}
+    {%- when 'ruler' -%}
+      <rect x="2.5" y="8" width="19" height="8"/>
+      <path d="M6.5 8v3M10 8v4.5M13.5 8v3M17 8v4.5"/>
+    {%- when 'scissors' -%}
+      <circle cx="6" cy="6" r="2.5"/>
+      <circle cx="6" cy="18" r="2.5"/>
+      <path d="M8.2 7.3 20 17M8.2 16.7 20 7"/>
+    {%- when 'lock' -%}
+      <rect x="5" y="11" width="14" height="10"/>
+      <path d="M8 11V7.5a4 4 0 0 1 8 0V11M12 15v2.5"/>
+    {%- when 'shield' -%}
+      <path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/>
+      <path d="m8.5 12 2.5 2.5 4.5-5"/>
+    {%- when 'truck' -%}
+      <path d="M2.5 6.5h11v9.5h-11zM13.5 9.5h4l3 3.5v3h-7"/>
+      <circle cx="6.5" cy="18" r="1.8"/>
+      <circle cx="17" cy="18" r="1.8"/>
+    {%- when 'return' -%}
+      <path d="M9 14 4 9l5-5"/>
+      <path d="M4 9h10a6 6 0 0 1 0 12h-3"/>
+  {%- endcase -%}
+</svg>
