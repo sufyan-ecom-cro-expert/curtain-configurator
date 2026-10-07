@@ -65,6 +65,7 @@
     --cc-surface: {{ section.settings.surface }};
     --cc-text: {{ section.settings.text }};
     --cc-accent: {{ section.settings.accent }};
+    --cc-curtain: {{ section.settings.curtain_color }};
     --cc-heading-font: {{ heading_font.family }}, {{ heading_font.fallback_families }};
     --cc-heading-weight: {{ heading_font.weight }};
     --cc-pad-top: {{ section.settings.padding_top }}px;
@@ -303,7 +304,13 @@
             {%- endif -%}
 
           {%- when 'collapsible_row' -%}
-            <details class="cc__row" {% if block.settings.open %}open{% endif %} {{ block.shopify_attributes }}>
+            <details
+              class="cc__row{% if block.settings.open %} is-open{% endif %}"
+              {% if block.settings.open %}
+                open
+              {% endif %}
+              {{ block.shopify_attributes }}
+            >
               <summary class="cc__row-title">
                 {{- block.settings.heading -}}
                 <span class="cc__row-icon" aria-hidden="true"></span>
@@ -467,6 +474,13 @@
       "id": "accent",
       "label": "Accent",
       "default": "#2E4A42"
+    },
+    {
+      "type": "color",
+      "id": "curtain_color",
+      "label": "Button hover curtain",
+      "info": "The fabric that drops over the add to cart button on hover.",
+      "default": "#F3E4D4"
     },
     {
       "type": "header",
@@ -673,6 +687,7 @@
           "type": "checkbox",
           "id": "open",
           "label": "Open by default",
+          "info": "Only one row stays open at a time.",
           "default": false
         }
       ]

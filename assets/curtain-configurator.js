@@ -32,6 +32,17 @@ class CurtainConfigurator extends HTMLElement {
     );
     window.addEventListener('resize', setHeaderHeight);
 
+    this.rows = [...this.querySelectorAll('.cc__row')];
+    this.rows.forEach((row) =>
+      row.querySelector('summary').addEventListener('click', (event) => {
+        event.preventDefault();
+        this.toggleRow(row, !row.classList.contains('is-open'));
+      })
+    );
+    this.addEventListener('shopify:block:select', (event) => {
+      if (this.rows.includes(event.target)) this.toggleRow(event.target, true);
+    });
+
     // Blocks can be removed in the theme editor, so stop if a required one is missing.
     this.form = this.querySelector('form');
     const config = this.querySelector('[data-config]');
@@ -69,6 +80,28 @@ class CurtainConfigurator extends HTMLElement {
     const start = addDays(Number(minDays), workingDaysOnly);
     const end = addDays(Math.max(Number(minDays), Number(maxDays)), workingDaysOnly);
     note.textContent = deliveryNote.replace('[start]', formatDay(start)).replace('[end]', formatDay(end));
+  }
+
+  // Animates the row's height. The details element stays open until the closing animation ends.
+  toggleRow(row, open) {
+    if (open) this.rows.forEach((other) => other !== row && other.classList.contains('is-open') && this.toggleRow(other, false));
+
+    const startHeight = row.offsetHeight;
+    row.animation?.cancel();
+    row.classList.toggle('is-open', open);
+    row.open = true;
+    const endHeight = open ? row.offsetHeight : row.offsetHeight - row.querySelector('.cc__row-content').offsetHeight;
+
+    row.style.overflow = 'hidden';
+    row.animation = row.animate(
+      { height: [`${startHeight}px`, `${endHeight}px`] },
+      { duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 350, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' }
+    );
+    row.animation.onfinish = () => {
+      row.open = open;
+      row.style.overflow = '';
+      row.animation = null;
+    };
   }
 
   onInput(event) {

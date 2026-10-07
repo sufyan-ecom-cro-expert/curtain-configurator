@@ -226,7 +226,11 @@ Every part of the product column is its own block, so it can be reordered, remov
 | Fabric picker | Label | Shows the Fabric swatch blocks, or the Color values if there are none |
 | Fabric swatch | Color option value, swatch color, optional fabric image | One per color. The value must match the variant's Color value exactly |
 | Price and add to cart | Title, panel count visibility, note, delivery days, working days only | The summary card and button |
-| Collapsible row | Heading, content, open by default | Add as many as needed. The template has three under the button |
+| Collapsible row | Heading, content, open by default | Add as many as needed. The template has three under the button, all closed |
+
+Collapsible rows slide open and closed, and only one stays open at a time. Opening a row closes any other open row. Selecting a row's block in the theme editor opens it.
+
+The add to cart button uses a curtain hover: a pleated curtain with a scalloped hem drops over the button, and the label turns to the accent color. The curtain color is the **Button hover curtain** section setting.
 
 The step numbers 01, 02 and 03 come from a CSS counter, so they follow the block order. The script stops quietly if the width, drop, fabric or add to cart block is removed, and the gallery keeps working.
 
@@ -235,14 +239,14 @@ The step numbers 01, 02 and 03 come from a CSS counter, so they follow the block
 **Section settings.**
 - **Gallery:** image ratio. On desktop the main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies, and on mobile the thumbnails move under the image.
 - **Configuration:** default width, and the names of the Color, Drop and Panels options.
-- **Style:** heading font, background, alternative background for the summary card, inputs and image backdrop, text and accent colors.
+- **Style:** heading font, background, alternative background for the summary card, inputs and image backdrop, text, accent, and the button hover curtain color.
 - **Spacing:** top and bottom padding, and the column gap.
 
 The section only appears on product templates. It shows a setup notice in the editor if the metafield or the options are missing.
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 46 checks against a live preview:
+`tests/e2e/run.mjs` runs 49 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
@@ -250,6 +254,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 - **Delivery dates:** the note shows the dates 7 and 10 working days from today.
 - **Interaction:** color swaps the gallery image, and arrow keys move through the swatches.
 - **Layout:** thumbnails to the left of the main image, the main image filling the screen below the header, three collapsible rows under the button, zero layout shift, and no horizontal overflow at tablet and mobile widths.
+- **Interaction:** rows start closed and only one opens at a time, and the button curtain covers the button on hover.
 - **Cart:** the exact `/cart/add.js` payload, the drawer contents, the cart page contents, and the cart line read back from `/cart.js`.
 - **Errors:** a simulated 422 response and a simulated network failure.
 

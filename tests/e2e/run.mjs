@@ -154,9 +154,26 @@ check('summary for 180/200/Stone Grey', (await price()) === 'Rs.26,500.00' && (a
 const shifts = await page.evaluate(() => window.__shifts);
 check('zero layout shift during interaction', shifts.reduce((a, b) => a + b.value, 0) === 0, JSON.stringify(shifts));
 
+const openRows = () => page.locator('.cc__row').evaluateAll((rows) => rows.map((row) => row.open));
+check('all rows closed by default', (await openRows()).every((open) => !open));
+await page.locator('.cc__row-title').nth(0).click();
+await page.waitForTimeout(500);
 await page.locator('.cc__row-title').nth(1).click();
-check('collapsible row opens', await page.locator('.cc__row').nth(1).evaluate((el) => el.open));
+await page.waitForTimeout(500);
+check('only one row open at a time', JSON.stringify(await openRows()) === '[false,true,false]', JSON.stringify(await openRows()));
 await page.locator('.cc__row-title').nth(1).click();
+await page.waitForTimeout(500);
+check('row closes again', (await openRows()).every((open) => !open));
+
+await page.locator('[data-submit]').hover();
+await page.waitForTimeout(900);
+const hover = await page.locator('[data-submit]').evaluate((el) => ({
+  curtain: getComputedStyle(el, '::before').transform,
+  color: getComputedStyle(el).color,
+  accent: getComputedStyle(el).borderTopColor,
+}));
+check('button curtain drops on hover', hover.curtain === 'matrix(1, 0, 0, 1, 0, 0)' && hover.color === hover.accent, JSON.stringify(hover));
+await page.mouse.move(0, 0);
 
 // Add to cart.
 const requestPromise = page.waitForRequest((r) => r.url().includes('/cart/add.js'));

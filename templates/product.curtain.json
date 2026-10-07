@@ -78,7 +78,7 @@
           "settings": {
             "heading": "How to measure",
             "content": "<p>Measure the full length of your track or pole in centimetres and enter it as the width. For a pole, measure between the finials. Choose the drop that ends where you want the curtain to fall.</p>",
-            "open": true
+            "open": false
           }
         },
         "row_panels": {
@@ -123,6 +123,7 @@
         "surface": "#FCF8F2",
         "text": "#000000",
         "accent": "#6c382e",
+        "curtain_color": "#F3E4D4",
         "padding_top": 16,
         "padding_bottom": 64,
         "column_gap": 64

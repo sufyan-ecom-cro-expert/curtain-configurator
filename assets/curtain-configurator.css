@@ -454,7 +454,7 @@
   width: 100%;
   height: 5.8rem;
   padding: 0 2rem;
-  border: 0;
+  border: 1px solid var(--cc-accent);
   background: var(--cc-accent);
   color: #fff;
   font: inherit;
@@ -463,11 +463,42 @@
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.15s ease, opacity 0.25s ease;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.42s ease 0.18s, transform 0.15s ease, opacity 0.25s ease;
 }
 
-.cc__submit:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--cc-accent) 86%, #000);
+/* A pleated curtain with a scalloped hem drops over the button on hover. */
+.cc__submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 115%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.35) 0 4px,
+      color-mix(in srgb, var(--cc-accent) 10%, transparent) 4px 9px,
+      rgba(255, 255, 255, 0.15) 9px 13px
+    ),
+    var(--cc-curtain);
+  transform: translateY(-101%);
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
+  -webkit-mask: radial-gradient(9px 7px at 50% 100%, #0000 98%, #000) 50% 100% / 18px 100% repeat-x;
+  mask: radial-gradient(9px 7px at 50% 100%, #0000 98%, #000) 50% 100% / 18px 100% repeat-x;
+}
+
+.cc__submit:hover:not(:disabled),
+.cc__submit:focus-visible {
+  color: var(--cc-accent);
+}
+
+.cc__submit:hover:not(:disabled)::before,
+.cc__submit:focus-visible::before {
+  transform: translateY(0);
 }
 
 .cc__submit:active:not(:disabled) {
@@ -500,8 +531,8 @@
 .cc__spinner {
   width: 2rem;
   height: 2rem;
-  border: 2px solid rgba(255, 255, 255, 0.35);
-  border-top-color: #fff;
+  border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
   opacity: 0;
 }
@@ -587,7 +618,7 @@
   transform: rotate(90deg);
 }
 
-.cc__row[open] .cc__row-icon::after {
+.cc__row.is-open .cc__row-icon::after {
   transform: rotate(0);
 }
 
