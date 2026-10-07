@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -7,45 +16,49 @@
           "type": "swatch",
           "settings": {
             "option_value": "Ivory",
-            "color": "#ECE4D6"
+            "color": "#ece4d6"
           }
         },
         "swatch_stone_grey": {
           "type": "swatch",
           "settings": {
             "option_value": "Stone Grey",
-            "color": "#9A968E"
+            "color": "#9a968e"
           }
         },
         "swatch_teal": {
           "type": "swatch",
           "settings": {
             "option_value": "Teal",
-            "color": "#2F5E62"
+            "color": "#2f5e62"
           }
         }
       },
-      "block_order": ["swatch_ivory", "swatch_stone_grey", "swatch_teal"],
+      "block_order": [
+        "swatch_ivory",
+        "swatch_stone_grey",
+        "swatch_teal"
+      ],
       "settings": {
         "heading": "",
-        "show_vendor": true,
+        "show_vendor": false,
         "show_description": true,
         "show_panel_info": true,
         "note": "Made to order · Ships [start] to [end]",
         "delivery_min_days": 7,
         "delivery_max_days": 10,
         "delivery_working_days": true,
-        "media_ratio": "portrait",
+        "media_ratio": "square",
         "default_width": 150,
         "color_option": "Color",
         "drop_option": "Drop",
         "panel_option": "Panels",
         "heading_font": "cormorant_n5",
-        "background": "#FFFFFF",
-        "surface": "#F7F7F7",
-        "text": "#1E1C19",
-        "accent": "#2E4A42",
-        "padding_top": 48,
+        "background": "#ffffff",
+        "surface": "#FCF8F2",
+        "text": "#000000",
+        "accent": "#6c382e",
+        "padding_top": 16,
         "padding_bottom": 64,
         "column_gap": 64
       }
@@ -58,7 +71,8 @@
           "settings": {
             "heading": "How to measure",
             "icon": "ruler",
-            "row_content": "<p>Measure the full length of your track or pole in centimetres and enter it as the width. For a pole, measure between the finials. Choose the drop that ends where you want the curtain to fall.</p>"
+            "row_content": "<p>Measure the full length of your track or pole in centimetres and enter it as the width. For a pole, measure between the finials. Choose the drop that ends where you want the curtain to fall.</p>",
+            "page": ""
           }
         },
         "panels": {
@@ -66,7 +80,8 @@
           "settings": {
             "heading": "Why the price changes with width",
             "icon": "leaf",
-            "row_content": "<p>Wider windows need more fabric panels sewn together for a full, even drape. We work out the panel count from your width, so you only pay for the fabric your window needs.</p>"
+            "row_content": "<p>Wider windows need more fabric panels sewn together for a full, even drape. We work out the panel count from your width, so you only pay for the fabric your window needs.</p>",
+            "page": ""
           }
         },
         "delivery": {
@@ -74,19 +89,24 @@
           "settings": {
             "heading": "Delivery",
             "icon": "truck",
-            "row_content": "<p>Every curtain is cut and sewn to order and dispatched within 7 to 10 working days.</p>"
+            "row_content": "<p>Every curtain is cut and sewn to order and dispatched within 7 to 10 working days.</p>",
+            "page": ""
           }
         }
       },
-      "block_order": ["measure", "panels", "delivery"],
+      "block_order": [
+        "measure",
+        "panels",
+        "delivery"
+      ],
       "settings": {
         "caption": "",
         "heading": "Good to know",
         "heading_size": "h1",
         "heading_alignment": "left",
         "layout": "none",
-        "color_scheme": "scheme-1",
         "container_color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "open_first_collapsible_row": true,
         "image_ratio": "adapt",
         "desktop_layout": "image_second",
@@ -95,5 +115,8 @@
       }
     }
   },
-  "order": ["main", "guide"]
+  "order": [
+    "main",
+    "guide"
+  ]
 }
