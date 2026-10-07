@@ -81,16 +81,16 @@ curtain-configurator :focus-visible {
 }
 
 .cc__image-badge {
-  position: absolute;
-  top: 1.6rem;
-  left: 1.6rem;
-  padding: 0.8rem 1.2rem;
-  background: var(--cc-bg);
-  color: var(--cc-text);
-  font-size: 1.1rem;
-  line-height: 1;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+    position: absolute;
+    top: 1.6rem;
+    RIGHT: 1.6rem;
+    padding: .8rem 1.2rem;
+    background: #6c382e;
+    color: #fcf8f2;
+    font-size: 1.1rem;
+    line-height: 1;
+    letter-spacing: .2em;
+    text-transform: uppercase;
 }
 
 /* Zoom: a high-resolution copy of the active image, positioned under the pointer. */
@@ -652,7 +652,7 @@ curtain-configurator :focus-visible {
   position: relative;
   display: flex;
   overflow: hidden;
-  padding: 2rem 0 1.8rem;
+  padding: 1.1rem 0 1.1rem;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
@@ -700,7 +700,7 @@ curtain-configurator :focus-visible {
 .cc__marquee-item {
   display: flex;
   align-items: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -737,7 +737,7 @@ curtain-configurator :focus-visible {
   display: grid;
   align-content: start;
   justify-items: center;
-  gap: 0.6rem;
+  gap: 0.1rem;
   padding: 0 1rem;
   text-align: center;
 }
@@ -889,7 +889,7 @@ curtain-configurator :focus-visible {
   }
 
   .cc__price {
-    font-size: 2.4rem;
+    font-size: 1.7rem;
   }
 }
 
@@ -927,9 +927,14 @@ curtain-configurator :focus-visible {
   }
 
   .cc__title {
-    font-size: 3.6rem;
+    font-size: 3rem;
   }
-
+.cc__intro {
+    font-size: 1.2rem;
+}
+.cc__width-input, .cc__drop {
+    height: 4.5rem;
+}
   .cc__panel > :not(:first-child) {
     margin-top: 2.8rem;
   }
@@ -939,27 +944,54 @@ curtain-configurator :focus-visible {
   }
 
   .cc__summary {
-    padding: 2rem 1.8rem;
+    padding: 1rem;
+        gap: 1rem;
   }
+  .cc__specs dt {
+    font-size: .9rem;
+}
+.cc__specs div {
+    padding: .3rem;
+}
+.cc__summary-foot {
+    margin-top: 0;
+}
 
   .cc__summary-title {
-    font-size: 2rem;
+    font-size: 1.7rem;
   }
 
   .cc__swatches {
-    gap: 1.4rem 1.6rem;
+    gap: 1.4rem 0.6rem;
   }
-
+.cc__message {
+    margin-top: .4rem;
+}
   .cc__badge {
     padding: 0 0.6rem;
   }
 
   .cc__badge-title {
     letter-spacing: 0.06em;
+        font-size: 1rem;
   }
-
+.cc__badge-text {
+    font-size: .9rem;
+    white-space: nowrap;
+}
+.cc__submit {
+    height: 5rem;
+}
+.cc__specs dd {
+    line-height: normal;
+    font-size: 1.3rem;
+}
   /* Room for two lines, so the dates filled in by the script never push content down. */
   .cc__note {
-    min-height: 3em;
+    min-height: auto;
   }
+  .cc__swatch-chip {
+    width: 2.5rem;
+    height: 2.5rem;
+}
 }
