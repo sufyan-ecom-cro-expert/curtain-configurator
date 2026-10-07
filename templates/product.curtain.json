@@ -12,6 +12,35 @@
     "main": {
       "type": "curtain-configurator",
       "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "heading": ""
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "width": {
+          "type": "width",
+          "settings": {
+            "label": "Width",
+            "hint": "Measure your track or pole."
+          }
+        },
+        "drop": {
+          "type": "drop",
+          "settings": {
+            "label": "Drop"
+          }
+        },
+        "fabric": {
+          "type": "fabric",
+          "settings": {
+            "label": "Fabric"
+          }
+        },
         "swatch_ivory": {
           "type": "swatch",
           "settings": {
@@ -32,22 +61,58 @@
             "option_value": "Teal",
             "color": "#2f5e62"
           }
+        },
+        "buy": {
+          "type": "buy",
+          "settings": {
+            "title": "Your curtain",
+            "show_panel_info": true,
+            "note": "Made to order · Ships [start] to [end]",
+            "delivery_min_days": 7,
+            "delivery_max_days": 10,
+            "delivery_working_days": true
+          }
+        },
+        "row_measure": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How to measure",
+            "content": "<p>Measure the full length of your track or pole in centimetres and enter it as the width. For a pole, measure between the finials. Choose the drop that ends where you want the curtain to fall.</p>",
+            "open": true
+          }
+        },
+        "row_panels": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Why the price changes with width",
+            "content": "<p>Wider windows need more fabric panels sewn together for a full, even drape. We work out the panel count from your width, so you only pay for the fabric your window needs.</p>",
+            "open": false
+          }
+        },
+        "row_delivery": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Delivery",
+            "content": "<p>Every curtain is cut and sewn to order and dispatched within 7 to 10 working days.</p>",
+            "open": false
+          }
         }
       },
       "block_order": [
+        "title",
+        "description",
+        "width",
+        "drop",
+        "fabric",
         "swatch_ivory",
         "swatch_stone_grey",
-        "swatch_teal"
+        "swatch_teal",
+        "buy",
+        "row_measure",
+        "row_panels",
+        "row_delivery"
       ],
       "settings": {
-        "heading": "",
-        "show_vendor": false,
-        "show_description": true,
-        "show_panel_info": true,
-        "note": "Made to order · Ships [start] to [end]",
-        "delivery_min_days": 7,
-        "delivery_max_days": 10,
-        "delivery_working_days": true,
         "media_ratio": "square",
         "default_width": 150,
         "color_option": "Color",
@@ -62,61 +127,9 @@
         "padding_bottom": 64,
         "column_gap": 64
       }
-    },
-    "guide": {
-      "type": "collapsible-content",
-      "blocks": {
-        "measure": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How to measure",
-            "icon": "ruler",
-            "row_content": "<p>Measure the full length of your track or pole in centimetres and enter it as the width. For a pole, measure between the finials. Choose the drop that ends where you want the curtain to fall.</p>",
-            "page": ""
-          }
-        },
-        "panels": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Why the price changes with width",
-            "icon": "leaf",
-            "row_content": "<p>Wider windows need more fabric panels sewn together for a full, even drape. We work out the panel count from your width, so you only pay for the fabric your window needs.</p>",
-            "page": ""
-          }
-        },
-        "delivery": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Delivery",
-            "icon": "truck",
-            "row_content": "<p>Every curtain is cut and sewn to order and dispatched within 7 to 10 working days.</p>",
-            "page": ""
-          }
-        }
-      },
-      "block_order": [
-        "measure",
-        "panels",
-        "delivery"
-      ],
-      "settings": {
-        "caption": "",
-        "heading": "Good to know",
-        "heading_size": "h1",
-        "heading_alignment": "left",
-        "layout": "none",
-        "container_color_scheme": "scheme-2",
-        "color_scheme": "scheme-1",
-        "open_first_collapsible_row": true,
-        "image_ratio": "adapt",
-        "desktop_layout": "image_second",
-        "padding_top": 36,
-        "padding_bottom": 52
-      }
     }
   },
   "order": [
-    "main",
-    "guide"
+    "main"
   ]
 }

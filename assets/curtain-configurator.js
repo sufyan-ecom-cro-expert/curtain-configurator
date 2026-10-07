@@ -16,15 +16,29 @@ const addDays = (days, workingDaysOnly) => {
   return date;
 };
 
+const setHeaderHeight = () =>
+  document.documentElement.style.setProperty(
+    '--cc-header-height',
+    `${document.getElementById('MainContent')?.offsetTop || 0}px`
+  );
+
 const formatDay = (date) =>
   `${date.getDate()} ${date.toLocaleDateString(document.documentElement.lang || undefined, { month: 'long' })}`;
 
 class CurtainConfigurator extends HTMLElement {
   connectedCallback() {
-    this.form = this.querySelector('form');
-    if (!this.form) return;
+    this.querySelectorAll('[data-media-target]').forEach((thumb) =>
+      thumb.addEventListener('click', () => this.showMedia(thumb.dataset.mediaTarget))
+    );
+    window.addEventListener('resize', setHeaderHeight);
 
-    this.config = JSON.parse(this.querySelector('[data-config]').textContent);
+    // Blocks can be removed in the theme editor, so stop if a required one is missing.
+    this.form = this.querySelector('form');
+    const config = this.querySelector('[data-config]');
+    const required = ['[name="width"]', '[name="drop"]', '[name="color"]', '[data-submit]'];
+    if (!config || required.some((selector) => !this.form.querySelector(selector))) return;
+
+    this.config = JSON.parse(config.textContent);
     this.widthInput = this.form.elements.width;
     this.widthError = this.querySelector('[data-width-error]');
     this.price = this.querySelector('[data-price]');
@@ -41,9 +55,6 @@ class CurtainConfigurator extends HTMLElement {
     this.form.addEventListener('input', (event) => this.onInput(event));
     this.form.addEventListener('submit', (event) => this.onSubmit(event));
     this.widthInput.addEventListener('change', () => this.showWidthError());
-    this.querySelectorAll('[data-media-target]').forEach((thumb) =>
-      thumb.addEventListener('click', () => this.showMedia(thumb.dataset.mediaTarget))
-    );
 
     this.renderDeliveryDates();
     this.update();

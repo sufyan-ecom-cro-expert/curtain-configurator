@@ -14,7 +14,7 @@ All pricing data lives in a metaobject. The theme code contains no width ranges 
 | `snippets/curtain-swatch.liquid` | One fabric swatch radio, used by swatch blocks and by the fallback |
 | `assets/curtain-configurator.js` | The `<curtain-configurator>` custom element (vanilla ES2020, no libraries) |
 | `assets/curtain-configurator.css` | Styles, loaded only by this section |
-| `templates/product.curtain.json` | Product template that uses the section and a measuring guide |
+| `templates/product.curtain.json` | Product template with the configurator blocks and three collapsible rows |
 | `schema/curtain-pricing-tier.json` | Export of the metaobject definition, its entries and the product metafield definition |
 | `schema/example-cart-add-payload.json` | The exact request body sent to `/cart/add.js` |
 | `schema/example-cart-line.json` | The resulting cart line, read back from `/cart.js` |
@@ -97,7 +97,7 @@ The option names are section settings, so a product that uses "Colour" or "Lengt
 
 1. Push the theme with `shopify theme push --unpublished`, or copy in the files from the table above.
 2. In **Theme settings → Cart**, set **Cart type** to **Drawer**. The section also works with the notification popup or the cart page, but the drawer is the intended experience.
-3. Open the product in the theme editor. The swatches are blocks. Each block's **Color option value** must match the variant's Color value exactly.
+3. Open the product in the theme editor. Each part of the product column is a block. Each Fabric swatch block's **Color option value** must match the variant's Color value exactly.
 
 ## How the price is calculated
 
@@ -195,7 +195,7 @@ Dawn already hides underscore properties in both cart templates, so no change wa
 
 ## Zero layout shift
 
-- **Fixed media box.** The gallery uses a fixed aspect ratio, and every image has width and height attributes.
+- **Fixed media box.** On desktop the main image height is the screen height minus everything above the page content. A small inline script measures that before the gallery renders, so the image never resizes after load. On tablet and mobile the gallery uses a fixed aspect ratio. Every image has width and height attributes.
 - **Reserved message slot.** The hint and the validation error share one grid cell. Errors toggle visibility instead of being inserted.
 - **Stable text boxes.** The price, the summary values and the button label sit in boxes that don't change size when their text changes. Numbers use tabular figures.
 - **Reserved note height.** The delivery note keeps room for its text before the script fills in the dates, two lines on mobile.
@@ -214,25 +214,42 @@ The end-to-end test records every `layout-shift` entry during the interactions a
 
 ## Theme editor settings
 
-- **Content:** heading, vendor, description, panel count visibility, the note under the button, and image ratio.
-- **Delivery dates:** the note can contain `[start]` and `[end]`. The script fills them with dates counted from today, for example "Made to order · Ships 16 October to 21 October". The earliest and latest day counts are settings, and weekends can be skipped. The dates are worked out in the browser, because Shopify may serve a cached page rendered on an earlier day.
+Every part of the product column is its own block, so it can be reordered, removed or added again in the theme editor.
+
+| Block | Settings | Notes |
+| --- | --- | --- |
+| Vendor | None | Shows the product vendor |
+| Title | Heading | Blank uses the product title |
+| Description | None | Shows the product description |
+| Width input | Label, hint | The allowed range is added after the hint |
+| Drop picker | Label | Values come from the Drop option |
+| Fabric picker | Label | Shows the Fabric swatch blocks, or the Color values if there are none |
+| Fabric swatch | Color option value, swatch color, optional fabric image | One per color. The value must match the variant's Color value exactly |
+| Price and add to cart | Title, panel count visibility, note, delivery days, working days only | The summary card and button |
+| Collapsible row | Heading, content, open by default | Add as many as needed. The template has three under the button |
+
+The step numbers 01, 02 and 03 come from a CSS counter, so they follow the block order. The script stops quietly if the width, drop, fabric or add to cart block is removed, and the gallery keeps working.
+
+**Delivery dates.** The note in the add to cart block can contain `[start]` and `[end]`. The script fills them with dates counted from today, for example "Made to order · Ships 16 October to 21 October". The earliest and latest day counts are settings, and weekends can be skipped. The dates are worked out in the browser, because Shopify may serve a cached page rendered on an earlier day.
+
+**Section settings.**
+- **Gallery:** image ratio. On desktop the main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies, and on mobile the thumbnails move under the image.
 - **Configuration:** default width, and the names of the Color, Drop and Panels options.
-- **Style:** heading font, background (white by default), alternative background (#F7F7F7, used for the summary card, inputs and image backdrop), text and accent colors.
+- **Style:** heading font, background, alternative background for the summary card, inputs and image backdrop, text and accent colors.
 - **Spacing:** top and bottom padding, and the column gap.
-- **Blocks:** one Fabric swatch block per color, with an option value, a color and an optional fabric image.
 
 The section only appears on product templates. It shows a setup notice in the editor if the metafield or the options are missing.
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 42 checks against a live preview:
+`tests/e2e/run.mjs` runs 46 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
 - **Validation:** inline errors for 49, 361, 180.5 and an empty field.
 - **Delivery dates:** the note shows the dates 7 and 10 working days from today.
 - **Interaction:** color swaps the gallery image, and arrow keys move through the swatches.
-- **Layout:** zero layout shift, and no horizontal overflow at tablet and mobile widths.
+- **Layout:** thumbnails to the left of the main image, the main image filling the screen below the header, three collapsible rows under the button, zero layout shift, and no horizontal overflow at tablet and mobile widths.
 - **Cart:** the exact `/cart/add.js` payload, the drawer contents, the cart page contents, and the cart line read back from `/cart.js`.
 - **Errors:** a simulated 422 response and a simulated network failure.
 

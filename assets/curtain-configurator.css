@@ -30,13 +30,24 @@
   top: 2.4rem;
   display: grid;
   gap: 1.2rem;
+  align-items: start;
 }
 
+.cc__gallery--thumbs {
+  grid-template-columns: 8rem minmax(0, 1fr);
+}
+
+/* Fill the first screen below the header and the section's top padding. */
 .cc__stage {
   position: relative;
-  aspect-ratio: var(--cc-ratio);
+  height: calc(100vh - var(--cc-header-height, 0px) - var(--cc-pad-top));
   overflow: hidden;
   background: var(--cc-surface);
+}
+
+.cc__gallery--thumbs .cc__stage {
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .cc__slide {
@@ -61,13 +72,24 @@
   display: block;
 }
 
+/* Zero height plus min-height: 100% lets the stage set the row height; extra thumbnails scroll. */
 .cc__thumbs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(7.2rem, 1fr));
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+  height: 0;
+  min-height: 100%;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
   list-style: none;
+}
+
+.cc__thumbs li {
+  flex: none;
 }
 
 .cc__thumb {
@@ -103,11 +125,21 @@
 
 .cc__panel {
   padding-top: 0.8rem;
+  counter-reset: cc-step;
 }
 
-.cc__head {
-  display: grid;
-  gap: 1.4rem;
+.cc__panel > :not(:first-child) {
+  margin-top: 2rem;
+}
+
+.cc__panel > .cc__info + .cc__info {
+  margin-top: 1.4rem;
+}
+
+/* Divider between the product details and the first configuration block. */
+.cc__panel > .cc__info + :not(.cc__info) {
+  padding-top: 2rem;
+  border-top: 1px solid var(--cc-line);
 }
 
 .cc__eyebrow {
@@ -138,19 +170,12 @@
   padding-left: 1.8rem;
 }
 
-.cc__form {
-  display: grid;
-  gap: 2rem;
-  padding-top: 2rem;
-  margin-top: 2rem;
-  border-top: 1px solid var(--cc-line);
-}
-
 .cc__step {
   margin: 0;
   padding: 0;
   border: 0;
   min-width: 0;
+  counter-increment: cc-step;
 }
 
 .cc__label {
@@ -169,6 +194,10 @@
 
 .cc__index {
   color: var(--cc-accent);
+}
+
+.cc__index::before {
+  content: counter(cc-step, decimal-leading-zero);
 }
 
 .cc__selected {
@@ -504,6 +533,79 @@
   text-align: center;
 }
 
+/* Collapsible rows */
+
+.cc__panel > .cc__row + .cc__row {
+  margin-top: 0;
+}
+
+.cc__row {
+  border-bottom: 1px solid var(--cc-line);
+}
+
+.cc__panel > :not(.cc__row) + .cc__row {
+  border-top: 1px solid var(--cc-line);
+}
+
+.cc__row-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding: 1.6rem 0;
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  list-style: none;
+  cursor: pointer;
+}
+
+.cc__row-title::-webkit-details-marker {
+  display: none;
+}
+
+.cc__row-icon {
+  position: relative;
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.cc__row-icon::before,
+.cc__row-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transition: transform 0.25s var(--cc-ease);
+}
+
+.cc__row-icon::after {
+  transform: rotate(90deg);
+}
+
+.cc__row[open] .cc__row-icon::after {
+  transform: rotate(0);
+}
+
+.cc__row-content {
+  padding-bottom: 1.6rem;
+  font-size: 1.4rem;
+  line-height: 1.65;
+  color: var(--cc-muted);
+}
+
+.cc__row-content > :first-child {
+  margin-top: 0;
+}
+
+.cc__row-content > :last-child {
+  margin-bottom: 0;
+}
+
 .cc__notice {
   padding: 1.6rem;
   border: 1px dashed var(--cc-line);
@@ -532,6 +634,15 @@
     padding-inline: 3.2rem;
   }
 
+  .cc__gallery--thumbs {
+    grid-template-columns: 6.4rem minmax(0, 1fr);
+  }
+
+  .cc__stage {
+    height: auto;
+    aspect-ratio: var(--cc-ratio);
+  }
+
   .cc__title {
     font-size: 4rem;
   }
@@ -556,11 +667,21 @@
     position: static;
   }
 
+  .cc__gallery--thumbs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cc__gallery--thumbs .cc__stage {
+    grid-column: 1;
+  }
+
   .cc__thumbs {
-    display: flex;
+    grid-row: 2;
+    flex-direction: row;
+    height: auto;
+    min-height: 0;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none;
   }
 
   .cc__thumbs li {
@@ -572,8 +693,11 @@
     font-size: 3.6rem;
   }
 
-  .cc__form {
-    gap: 2.8rem;
+  .cc__panel > :not(:first-child) {
+    margin-top: 2.8rem;
+  }
+
+  .cc__panel > .cc__info + :not(.cc__info) {
     padding-top: 2.4rem;
   }
 

@@ -72,6 +72,26 @@ const expectedDay = (days) => {
 const note = await page.locator('.cc__note').innerText();
 check('delivery dates', note === `Made to order · Ships ${expectedDay(7)} to ${expectedDay(10)}`, note);
 
+const layout = await page.evaluate(() => {
+  const rect = (el) => el.getBoundingClientRect();
+  const stage = rect(document.querySelector('.cc__stage'));
+  const thumb = rect(document.querySelector('.cc__thumb'));
+  const main = document.getElementById('MainContent').offsetTop;
+  const padTop = parseFloat(getComputedStyle(document.querySelector('.cc')).paddingTop);
+  const summary = document.querySelector('.cc__summary');
+  const rows = [...document.querySelectorAll('.cc__panel > .cc__row')];
+  return {
+    thumbLeftOfStage: thumb.right <= stage.left && Math.abs(thumb.top - stage.top) < 2,
+    stageHeight: Math.round(stage.height),
+    expectedHeight: Math.round(window.innerHeight - main - padTop),
+    rows: rows.length,
+    rowsAfterSummary: rows.every((row) => summary.compareDocumentPosition(row) & Node.DOCUMENT_POSITION_FOLLOWING),
+  };
+});
+check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
+check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
+check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
+
 check('initial price', (await price()) === 'Rs.22,000.00', await price());
 check('initial label', (await label()).includes('Rs.22,000.00'), await label());
 
@@ -133,6 +153,10 @@ check('summary for 180/200/Stone Grey', (await price()) === 'Rs.26,500.00' && (a
 
 const shifts = await page.evaluate(() => window.__shifts);
 check('zero layout shift during interaction', shifts.reduce((a, b) => a + b.value, 0) === 0, JSON.stringify(shifts));
+
+await page.locator('.cc__row-title').nth(1).click();
+check('collapsible row opens', await page.locator('.cc__row').nth(1).evaluate((el) => el.open));
+await page.locator('.cc__row-title').nth(1).click();
 
 // Add to cart.
 const requestPromise = page.waitForRequest((r) => r.url().includes('/cart/add.js'));
