@@ -1,0 +1,11 @@
+{
+  "name": "curtain-configurator-e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node run.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}

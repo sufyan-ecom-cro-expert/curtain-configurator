@@ -1,0 +1,14 @@
+{
+  "id": 67634407407803,
+  "quantity": 1,
+  "properties": {
+    "Width": "180cm",
+    "Drop": "200cm",
+    "_fabric_panels": 2
+  },
+  "sections": [
+    "cart-drawer",
+    "cart-icon-bubble"
+  ],
+  "sections_url": "/products/made-to-measure-curtain"
+}

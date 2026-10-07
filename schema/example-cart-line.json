@@ -1,0 +1,19 @@
+{
+  "key": "67634407407803:680a8f2d8689505599840d4baf9aae5a",
+  "variant_id": 67634407407803,
+  "title": "Made-to-Measure Curtain - Stone Grey / 200cm / 2",
+  "variant_options": [
+    "Stone Grey",
+    "200cm",
+    "2"
+  ],
+  "sku": "MTM-STN-200-P2",
+  "quantity": 1,
+  "price": 2650000,
+  "line_price": 2650000,
+  "properties": {
+    "Width": "180cm",
+    "Drop": "200cm",
+    "_fabric_panels": 2
+  }
+}

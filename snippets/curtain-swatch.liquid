@@ -1,0 +1,32 @@
+{%- comment -%}
+  Renders one fabric swatch radio for the curtain configurator.
+
+  Accepts:
+  - section_id {String}
+  - index {Number}
+  - value {String} Color option value
+  - color {Color} Fallback fill
+  - image {Image} Optional fabric image
+  - selected_color {String}
+  - attributes {String} Optional block.shopify_attributes
+{%- endcomment -%}
+
+{%- assign swatch_id = 'CurtainSwatch-' | append: section_id | append: '-' | append: index -%}
+<input
+  type="radio"
+  class="cc__radio"
+  id="{{ swatch_id }}"
+  name="color"
+  value="{{ value | escape }}"
+  {% if value == selected_color %}
+    checked
+  {% endif %}
+>
+<label class="cc__swatch" for="{{ swatch_id }}" {{ attributes }}>
+  <span class="cc__swatch-chip" style="--swatch: {{ color | default: '#e8e1d4' }}">
+    {%- if image -%}
+      {{ image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '', width: 60, height: 60 }}
+    {%- endif -%}
+  </span>
+  <span class="cc__swatch-name">{{ value }}</span>
+</label>

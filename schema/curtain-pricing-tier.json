@@ -1,0 +1,143 @@
+{
+  "metaobjectDefinition": {
+    "name": "Curtain Pricing Tier",
+    "type": "curtain_pricing_tier",
+    "description": "Width ranges that decide fabric panel count and price for made-to-measure curtains.",
+    "access": {
+      "storefront": "PUBLIC_READ"
+    },
+    "fieldDefinitions": [
+      {
+        "key": "min_width",
+        "name": "Min width (cm)",
+        "type": "number_integer",
+        "required": true,
+        "validations": [
+          {
+            "name": "min",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "key": "max_width",
+        "name": "Max width (cm)",
+        "type": "number_integer",
+        "required": true,
+        "validations": [
+          {
+            "name": "min",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "key": "panels_required",
+        "name": "Panels required",
+        "type": "number_integer",
+        "required": true,
+        "validations": [
+          {
+            "name": "min",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "key": "base_price",
+        "name": "Base price",
+        "type": "number_decimal",
+        "required": true,
+        "validations": [
+          {
+            "name": "min",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "key": "price_per_drop_tier",
+        "name": "Price per drop tier",
+        "type": "number_decimal",
+        "required": true,
+        "validations": [
+          {
+            "name": "min",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  "entries": [
+    {
+      "handle": "tier-1-panel",
+      "fields": {
+        "min_width": 50,
+        "max_width": 120,
+        "panels_required": 1,
+        "base_price": "12000.00",
+        "price_per_drop_tier": "2500.00"
+      }
+    },
+    {
+      "handle": "tier-2-panels",
+      "fields": {
+        "min_width": 121,
+        "max_width": 240,
+        "panels_required": 2,
+        "base_price": "22000.00",
+        "price_per_drop_tier": "4500.00"
+      }
+    },
+    {
+      "handle": "tier-3-panels",
+      "fields": {
+        "min_width": 241,
+        "max_width": 360,
+        "panels_required": 3,
+        "base_price": "32000.00",
+        "price_per_drop_tier": "6500.00"
+      }
+    }
+  ],
+  "productMetafieldDefinition": {
+    "name": "Pricing tiers",
+    "namespace": "custom",
+    "key": "pricing_tiers",
+    "ownerType": "PRODUCT",
+    "type": "list.metaobject_reference",
+    "access": {
+      "storefront": "PUBLIC_READ"
+    },
+    "validations": [
+      {
+        "name": "metaobject_definition_id",
+        "value": "<id of the curtain_pricing_tier definition>"
+      }
+    ]
+  },
+  "product": {
+    "title": "Made-to-Measure Curtain",
+    "handle": "made-to-measure-curtain",
+    "templateSuffix": "curtain",
+    "options": {
+      "Color": [
+        "Ivory",
+        "Stone Grey",
+        "Teal"
+      ],
+      "Drop": [
+        "150cm",
+        "200cm",
+        "250cm"
+      ],
+      "Panels": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "variantPrice": "base_price + price_per_drop_tier * dropStep, where dropStep is the Drop value's position (150cm = 0, 200cm = 1, 250cm = 2)"
+  }
+}
