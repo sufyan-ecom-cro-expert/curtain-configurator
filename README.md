@@ -137,11 +137,3 @@ STORE_URL=https://your-store.myshopify.com STORE_PASSWORD=... THEME_ID=123456789
 ```
 
 It runs 65 checks against a theme preview. They cover the price at every tier edge, width validation, the cart request, the drawer and cart page, hidden properties, layout shift, the mobile layout, zoom, the accordion, and what happens when the cart request fails.
-
-## Notes
-
-- The layout doesn't shift as prices and messages change, because their space is reserved from the start. Dawn hides empty `div` and `p` elements, so the CSS forces the empty placeholders to stay visible.
-- Every input has a label. Swatches and drops are radio groups, so arrow keys work. The price is announced to screen readers when it changes.
-- Checkout and order emails still show the full variant title, such as "Stone Grey / 200cm / 2". Hiding that needs checkout customization.
-- The variant count is colors × drops × tiers. That's fine up to Shopify's limit of 2,048 variants per product.
-- The product photos are from Unsplash.
