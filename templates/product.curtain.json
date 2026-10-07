@@ -137,7 +137,7 @@
       ],
       "settings": {
         "media_ratio": "square",
-        "image_badge": "Bespoke",
+        "image_badge": "Custom Fit",
         "enable_zoom": true,
         "default_width": 150,
         "color_option": "Color",

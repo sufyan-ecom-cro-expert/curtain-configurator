@@ -138,7 +138,7 @@ check('marquee wording is unique on the page', marquee.items.length > 0 && marqu
 const imageBadges = await page.locator('.cc__image-badge').evaluateAll((els) =>
   els.map((el) => ({ text: el.textContent.trim(), onFirst: el.closest('.cc__slide') === document.querySelector('.cc__slide') }))
 );
-check('badge on the first image only', imageBadges.length === 1 && imageBadges[0].onFirst && imageBadges[0].text === 'Bespoke', JSON.stringify(imageBadges));
+check('badge on the first image only', imageBadges.length === 1 && imageBadges[0].onFirst && imageBadges[0].text === 'Custom Fit', JSON.stringify(imageBadges));
 
 const stage = page.locator('.cc__stage');
 const stageBox = await stage.boundingBox();
