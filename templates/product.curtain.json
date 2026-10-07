@@ -9,55 +9,6 @@
  */
 {
   "sections": {
-    "marquee": {
-      "type": "marquee",
-      "blocks": {
-        "text_1": {
-          "type": "text",
-          "settings": {
-            "text": "Made to measure",
-            "link": ""
-          }
-        },
-        "text_2": {
-          "type": "text",
-          "settings": {
-            "text": "Cut to your exact width",
-            "link": ""
-          }
-        },
-        "text_3": {
-          "type": "text",
-          "settings": {
-            "text": "Sewn to order",
-            "link": ""
-          }
-        },
-        "text_4": {
-          "type": "text",
-          "settings": {
-            "text": "Secure checkout",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "text_1",
-        "text_2",
-        "text_3",
-        "text_4"
-      ],
-      "settings": {
-        "speed": 30,
-        "direction": "left",
-        "pause_on_hover": true,
-        "text_size": 13,
-        "uppercase": true,
-        "background": "#6C382E",
-        "text": "#FBF3EA",
-        "padding": 14
-      }
-    },
     "main": {
       "type": "curtain-configurator",
       "blocks": {
@@ -159,6 +110,13 @@
             "title_3": "Sewn to order",
             "text_3": "Checked before dispatch"
           }
+        },
+        "marquee": {
+          "type": "marquee",
+          "settings": {
+            "items": "Quiet luxury for every room\nDesigned to frame the view\nEffortless elegance\nCrafted with care",
+            "speed": 24
+          }
         }
       },
       "block_order": [
@@ -171,6 +129,7 @@
         "swatch_stone_grey",
         "swatch_teal",
         "buy",
+        "marquee",
         "trust_badges",
         "row_measure",
         "row_panels",
@@ -195,7 +154,6 @@
     }
   },
   "order": [
-    "marquee",
     "main"
   ]
 }

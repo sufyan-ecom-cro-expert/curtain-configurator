@@ -47,17 +47,6 @@ const revealAll = async () => {
 await page.addStyleTag({ content: '#PBarNextFrameWrapper, #preview-bar-iframe { display: none !important; }' }).catch(() => {});
 await page.screenshot({ path: `${OUT}desktop-initial.png` });
 
-const marquee = await page.evaluate(() => {
-  const el = document.querySelector('.marquee');
-  const groups = el ? [...el.querySelectorAll('.marquee__group')] : [];
-  return {
-    aboveConfigurator: !!el && !!(el.compareDocumentPosition(document.querySelector('curtain-configurator')) & Node.DOCUMENT_POSITION_FOLLOWING),
-    animated: groups.length === 2 && getComputedStyle(groups[0]).animationName === 'marquee-scroll',
-    duplicateHidden: groups[1]?.getAttribute('aria-hidden') === 'true',
-    seamless: groups.length === 2 && groups[0].getBoundingClientRect().width >= el.getBoundingClientRect().width,
-  };
-});
-check('marquee above the configurator', marquee.aboveConfigurator && marquee.animated && marquee.duplicateHidden && marquee.seamless, JSON.stringify(marquee));
 
 const cc = page.locator('curtain-configurator');
 check('configurator rendered', (await cc.count()) === 1);
@@ -101,18 +90,40 @@ const layout = await page.evaluate(() => {
   };
 });
 check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
-check('main image fills screen below header and marquee', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
+check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
 check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
 const badges = await page.evaluate(() => {
   const list = document.querySelector('.cc__badges');
   return {
     count: list?.querySelectorAll('.cc__badge').length,
-    afterSummary: list?.previousElementSibling?.classList.contains('cc__summary'),
+    afterMarquee: list?.previousElementSibling?.classList.contains('cc__marquee'),
     beforeRows: list?.nextElementSibling?.classList.contains('cc__row'),
     titles: [...(list?.querySelectorAll('.cc__badge-title') || [])].map((el) => el.textContent.trim()),
   };
 });
-check('three trust badges between add to cart and rows', badges.count === 3 && badges.afterSummary && badges.beforeRows, badges.titles.join(' | '));
+check('three trust badges between marquee and rows', badges.count === 3 && badges.afterMarquee && badges.beforeRows, badges.titles.join(' | '));
+
+const marquee = await page.evaluate(() => {
+  const el = document.querySelector('.cc__marquee');
+  const groups = el ? [...el.querySelectorAll('.cc__marquee-group')] : [];
+  const items = groups[0] ? [...groups[0].querySelectorAll('.cc__marquee-item')].map((li) => li.textContent.trim()) : [];
+  const clone = document.querySelector('.cc__panel').cloneNode(true);
+  clone.querySelector('.cc__marquee')?.remove();
+  const rest = clone.textContent.toLowerCase();
+  return {
+    topMarqueeGone: !document.querySelector('.marquee'),
+    afterSummary: el?.previousElementSibling?.classList.contains('cc__summary'),
+    animated: groups.length === 2 && getComputedStyle(groups[0]).animationName === 'cc-marquee',
+    duplicateHidden: groups[1]?.getAttribute('aria-hidden') === 'true',
+    onceOnScreen: groups.length === 2 && [...groups[0].children].reduce((sum, li) => sum + li.getBoundingClientRect().width, 0) >= el.clientWidth,
+    items,
+    uniqueItems: new Set(items).size === items.length,
+    repeatedElsewhere: items.filter((item) => rest.includes(item.toLowerCase())),
+  };
+});
+check('top marquee removed', marquee.topMarqueeGone);
+check('minimal marquee under add to cart', marquee.afterSummary && marquee.animated && marquee.duplicateHidden && marquee.onceOnScreen, JSON.stringify(marquee));
+check('marquee wording is unique on the page', marquee.items.length > 0 && marquee.uniqueItems && marquee.repeatedElsewhere.length === 0, marquee.items.join(' | '));
 
 check('initial price', (await price()) === 'Rs.22,000.00', await price());
 check('initial label', (await label()).includes('Rs.22,000.00'), await label());

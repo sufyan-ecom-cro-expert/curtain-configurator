@@ -13,10 +13,9 @@ All pricing data lives in a metaobject. The theme code contains no width ranges 
 | `sections/curtain-configurator.liquid` | The section: gallery, inputs, summary card, and the JSON config read from the metafield |
 | `snippets/curtain-swatch.liquid` | One fabric swatch radio, used by swatch blocks and by the fallback |
 | `snippets/curtain-trust-icon.liquid` | Line icons for the trust badges |
-| `sections/marquee.liquid` and `assets/section-marquee.css` | Scrolling text strip, used above the configurator and available on any template |
 | `assets/curtain-configurator.js` | The `<curtain-configurator>` custom element (vanilla ES2020, no libraries) |
 | `assets/curtain-configurator.css` | Styles, loaded only by this section |
-| `templates/product.curtain.json` | Product template with the marquee, the configurator blocks and three collapsible rows |
+| `templates/product.curtain.json` | Product template with the configurator blocks and three collapsible rows |
 | `schema/curtain-pricing-tier.json` | Export of the metaobject definition, its entries and the product metafield definition |
 | `schema/example-cart-add-payload.json` | The exact request body sent to `/cart/add.js` |
 | `schema/example-cart-line.json` | The resulting cart line, read back from `/cart.js` |
@@ -197,7 +196,7 @@ Dawn already hides underscore properties in both cart templates, so no change wa
 
 ## Zero layout shift
 
-- **Fixed media box.** On desktop the main image height is the screen height minus everything above the section, including the header and the marquee. A small inline script measures that before the gallery renders, so the image never resizes after load. On tablet and mobile the gallery uses a fixed aspect ratio. Every image has width and height attributes.
+- **Fixed media box.** On desktop the main image height is the screen height minus everything above the section, including the header. A small inline script measures that before the gallery renders, so the image never resizes after load. On tablet and mobile the gallery uses a fixed aspect ratio. Every image has width and height attributes.
 - **Reserved message slot.** The hint and the validation error share one grid cell. Errors toggle visibility instead of being inserted.
 - **Stable text boxes.** The price, the summary values and the button label sit in boxes that don't change size when their text changes. Numbers use tabular figures.
 - **Reserved note height.** The delivery note keeps room for its text before the script fills in the dates, two lines on mobile.
@@ -228,7 +227,8 @@ Every part of the product column is its own block, so it can be reordered, remov
 | Fabric picker | Label | Shows the Fabric swatch blocks, or the Color values if there are none |
 | Fabric swatch | Color option value, swatch color, optional fabric image | One per color. The value must match the variant's Color value exactly |
 | Price and add to cart | Title, panel count visibility, note, delivery days, working days only | The summary card and button |
-| Trust badges | Icon, title and text for up to three badges | Sits under the add to cart card. A badge with an empty title is hidden |
+| Marquee | Items, one per line, and seconds per loop | A slim scrolling strip under the add to cart card. Pauses on hover |
+| Trust badges | Icon, title and text for up to three badges | Sits under the marquee. A badge with an empty title is hidden |
 | Collapsible row | Heading, content, open by default | Add as many as needed. The template has three under the button, all closed |
 
 Collapsible rows slide open and closed, and only one stays open at a time. Opening a row closes any other open row. Selecting a row's block in the theme editor opens it.
@@ -247,11 +247,9 @@ The step numbers 01, 02 and 03 come from a CSS counter, so they follow the block
 
 The section only appears on product templates. It shows a setup notice in the editor if the metafield or the options are missing.
 
-**Marquee.** A separate section that scrolls its text blocks in a continuous loop, with a small diamond between items. Settings cover speed, direction, pause on hover, text size, uppercase, colors and padding, and each text block can have a link. It uses CSS animation only, pauses for visitors who prefer reduced motion, and hides its duplicate copy from screen readers. It can be added to any template from the theme editor.
-
 ## Testing
 
-`tests/e2e/run.mjs` runs 51 checks against a live preview:
+`tests/e2e/run.mjs` runs 53 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
@@ -261,7 +259,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 - **Layout:** thumbnails to the left of the main image, the main image filling the screen below the header, three collapsible rows under the button, zero layout shift, and no horizontal overflow at tablet and mobile widths.
 - **Interaction:** rows start closed and only one opens at a time, and the button curtain covers the button on hover.
 - **Trust badges:** three badges sit between the add to cart card and the rows.
-- **Marquee:** it sits above the configurator, animates, and is wide enough to loop without a gap.
+- **Marquee:** it sits under the add to cart card, animates, and shows each phrase once on screen. None of its phrases repeat each other or any other text in the section.
 - **Cart:** the exact `/cart/add.js` payload, the drawer contents, the cart page contents, and the cart line read back from `/cart.js`.
 - **Errors:** a simulated 422 response and a simulated network failure.
 
