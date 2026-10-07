@@ -100,12 +100,17 @@ const layout = await page.evaluate(() => {
   };
 });
 check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
+const swatchGroups = await page.evaluate(() => {
+  const fieldsets = new Set([...document.querySelectorAll('.cc__swatch')].map((swatch) => swatch.closest('fieldset')));
+  return { swatches: document.querySelectorAll('.cc__swatch').length, fieldsets: fieldsets.size, names: [...document.querySelectorAll('.cc__swatch-name')].map((el) => el.textContent.trim()) };
+});
+check('all swatches come from one fabric block', swatchGroups.swatches === 3 && swatchGroups.fieldsets === 1, swatchGroups.names.join(' | '));
 const split = await page.evaluate(() => {
   const gallery = document.querySelector('.cc__gallery').getBoundingClientRect().width;
   const panel = document.querySelector('.cc__panel').getBoundingClientRect().width;
   return Math.round((gallery / (gallery + panel)) * 1000) / 10;
 });
-check('desktop split is 55% gallery, 45% info', Math.abs(split - 55) < 0.2, `${split}% gallery`);
+check('desktop split is 60% gallery, 40% info', Math.abs(split - 60) < 0.2, `${split}% gallery`);
 check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
 check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
 const rowTitles = await page.locator('.cc__row-title').evaluateAll((els) => els.map((el) => el.textContent.trim()));
@@ -158,11 +163,11 @@ await page.mouse.move(stageBox.x + stageBox.width / 2, stageBox.y + stageBox.hei
 await page.waitForTimeout(400);
 const zoomIn = await page.evaluate(() => {
   const zoom = getComputedStyle(document.querySelector('.cc__zoom'));
-  return { zoomed: document.querySelector('.cc__stage').classList.contains('is-zoomed'), visible: zoom.display !== 'none' && document.querySelector('.cc__zoom').offsetWidth > 0, opacity: zoom.opacity, image: zoom.backgroundImage, size: parseFloat(zoom.backgroundSize), width: document.querySelector('.cc__stage').clientWidth };
+  return { zoomed: document.querySelector('.cc__stage').classList.contains('is-zoomed'), visible: zoom.display !== 'none' && document.querySelector('.cc__zoom').offsetWidth > 0, opacity: zoom.opacity, image: zoom.backgroundImage, size: parseFloat(zoom.backgroundSize), width: document.querySelector('.cc__stage').getBoundingClientRect().width };
 });
 await page.mouse.move(stageBox.x + 2, stageBox.y + 2);
 const cornerPosition = await page.locator('.cc__zoom').evaluate((el) => el.style.backgroundPosition);
-check('hover zooms the main image', zoomIn.zoomed && zoomIn.visible && zoomIn.opacity === '1' && zoomIn.image.includes('width=2400') && zoomIn.size >= zoomIn.width * 2.5 - 1, JSON.stringify(zoomIn));
+check('hover zooms the main image', zoomIn.zoomed && zoomIn.visible && zoomIn.opacity === '1' && zoomIn.image.includes('width=2400') && zoomIn.size >= zoomIn.width * 2.5 - 0.5, JSON.stringify(zoomIn));
 check('zoom follows the pointer', /^0\.\d+% 0\.\d+%$|^0% 0%$/.test(cornerPosition), cornerPosition);
 await page.mouse.move(0, 0);
 await page.waitForTimeout(300);

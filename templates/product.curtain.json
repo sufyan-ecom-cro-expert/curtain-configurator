@@ -38,28 +38,16 @@
         "fabric": {
           "type": "fabric",
           "settings": {
-            "label": "Fabric"
-          }
-        },
-        "swatch_ivory": {
-          "type": "swatch",
-          "settings": {
-            "option_value": "Ivory",
-            "color": "#ece4d6"
-          }
-        },
-        "swatch_stone_grey": {
-          "type": "swatch",
-          "settings": {
-            "option_value": "Stone Grey",
-            "color": "#9a968e"
-          }
-        },
-        "swatch_teal": {
-          "type": "swatch",
-          "settings": {
-            "option_value": "Teal",
-            "color": "#2f5e62"
+            "label": "Fabric",
+            "swatch_1_value": "Ivory",
+            "swatch_1_color": "#ece4d6",
+            "swatch_2_value": "Stone Grey",
+            "swatch_2_color": "#9a968e",
+            "swatch_3_value": "Teal",
+            "swatch_3_color": "#2f5e62",
+            "swatch_4_value": "",
+            "swatch_5_value": "",
+            "swatch_6_value": ""
           }
         },
         "buy": {
@@ -125,9 +113,6 @@
         "width",
         "drop",
         "fabric",
-        "swatch_ivory",
-        "swatch_stone_grey",
-        "swatch_teal",
         "buy",
         "marquee",
         "trust_badges",

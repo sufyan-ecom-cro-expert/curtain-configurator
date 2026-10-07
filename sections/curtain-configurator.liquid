@@ -46,8 +46,6 @@
   endif
 
   assign active_media = initial_variant.featured_media | default: product.featured_media
-  assign swatch_blocks = section.blocks | where: 'type', 'swatch'
-
   case section.settings.media_ratio
     when 'square'
       assign media_ratio = '1 / 1'
@@ -102,7 +100,7 @@
               if media.id == active_media.id
                 assign loading = 'eager'
               endif
-              echo media.preview_image | image_url: width: 1600 | image_tag: widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 992px) 55vw, 100vw', loading: loading, alt: media.alt
+              echo media.preview_image | image_url: width: 1600 | image_tag: widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 992px) 60vw, 100vw', loading: loading, alt: media.alt
             -%}
             {%- if forloop.first and section.settings.image_badge != blank -%}
               <span class="cc__image-badge">{{ section.settings.image_badge }}</span>
@@ -236,17 +234,27 @@
                   <span class="cc__selected" data-selected-color>{{ selected_color }}</span>
                 </legend>
                 <div class="cc__swatches">
-                  {%- for swatch in swatch_blocks -%}
-                    {%- render 'curtain-swatch',
-                      section_id: section.id,
-                      index: forloop.index,
-                      value: swatch.settings.option_value,
-                      color: swatch.settings.color,
-                      image: swatch.settings.image,
-                      selected_color: selected_color,
-                      attributes: swatch.shopify_attributes
+                  {%- assign swatch_count = 0 -%}
+                  {%- for i in (1..6) -%}
+                    {%- liquid
+                      assign value_key = 'swatch_' | append: i | append: '_value'
+                      assign color_key = 'swatch_' | append: i | append: '_color'
+                      assign image_key = 'swatch_' | append: i | append: '_image'
                     -%}
-                  {%- else -%}
+                    {%- if block.settings[value_key] != blank -%}
+                      {%- assign swatch_count = swatch_count | plus: 1 -%}
+                      {%- render 'curtain-swatch',
+                        section_id: section.id,
+                        index: i,
+                        value: block.settings[value_key],
+                        color: block.settings[color_key],
+                        image: block.settings[image_key],
+                        selected_color: selected_color
+                      -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- if swatch_count == 0 -%}
                     {%- for value in color_option.values -%}
                       {%- render 'curtain-swatch',
                         section_id: section.id,
@@ -257,7 +265,7 @@
                         selected_color: selected_color
                       -%}
                     {%- endfor -%}
-                  {%- endfor -%}
+                  {%- endif -%}
                 </div>
               </fieldset>
             {%- endif -%}
@@ -678,29 +686,135 @@
         },
         {
           "type": "paragraph",
-          "content": "Add a Fabric swatch block for each color. Without swatch blocks, the product's color values are shown."
-        }
-      ]
-    },
-    {
-      "type": "swatch",
-      "name": "Fabric swatch",
-      "settings": [
+          "content": "Add up to six swatches. Each value must match a variant's color exactly, e.g. Ivory. With no swatches filled in, the product's color values are shown."
+        },
+        {
+          "type": "header",
+          "content": "Swatch 1"
+        },
         {
           "type": "text",
-          "id": "option_value",
+          "id": "swatch_1_value",
           "label": "Color option value",
-          "info": "Must match the variant's color value exactly, e.g. Ivory."
+          "default": "Ivory",
+          "info": "Leave blank to hide this swatch."
         },
         {
           "type": "color",
-          "id": "color",
+          "id": "swatch_1_color",
+          "label": "Swatch color",
+          "default": "#ECE4D6"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_1_image",
+          "label": "Fabric image",
+          "info": "Optional. Replaces the swatch color."
+        },
+        {
+          "type": "header",
+          "content": "Swatch 2"
+        },
+        {
+          "type": "text",
+          "id": "swatch_2_value",
+          "label": "Color option value",
+          "default": "Stone Grey"
+        },
+        {
+          "type": "color",
+          "id": "swatch_2_color",
+          "label": "Swatch color",
+          "default": "#9A968E"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_2_image",
+          "label": "Fabric image",
+          "info": "Optional. Replaces the swatch color."
+        },
+        {
+          "type": "header",
+          "content": "Swatch 3"
+        },
+        {
+          "type": "text",
+          "id": "swatch_3_value",
+          "label": "Color option value",
+          "default": "Teal"
+        },
+        {
+          "type": "color",
+          "id": "swatch_3_color",
+          "label": "Swatch color",
+          "default": "#2F5E62"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_3_image",
+          "label": "Fabric image",
+          "info": "Optional. Replaces the swatch color."
+        },
+        {
+          "type": "header",
+          "content": "Swatch 4"
+        },
+        {
+          "type": "text",
+          "id": "swatch_4_value",
+          "label": "Color option value"
+        },
+        {
+          "type": "color",
+          "id": "swatch_4_color",
           "label": "Swatch color",
           "default": "#E8E1D4"
         },
         {
           "type": "image_picker",
-          "id": "image",
+          "id": "swatch_4_image",
+          "label": "Fabric image",
+          "info": "Optional. Replaces the swatch color."
+        },
+        {
+          "type": "header",
+          "content": "Swatch 5"
+        },
+        {
+          "type": "text",
+          "id": "swatch_5_value",
+          "label": "Color option value"
+        },
+        {
+          "type": "color",
+          "id": "swatch_5_color",
+          "label": "Swatch color",
+          "default": "#E8E1D4"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_5_image",
+          "label": "Fabric image",
+          "info": "Optional. Replaces the swatch color."
+        },
+        {
+          "type": "header",
+          "content": "Swatch 6"
+        },
+        {
+          "type": "text",
+          "id": "swatch_6_value",
+          "label": "Color option value"
+        },
+        {
+          "type": "color",
+          "id": "swatch_6_color",
+          "label": "Swatch color",
+          "default": "#E8E1D4"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_6_image",
           "label": "Fabric image",
           "info": "Optional. Replaces the swatch color."
         }

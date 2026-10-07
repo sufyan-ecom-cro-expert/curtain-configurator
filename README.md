@@ -11,7 +11,7 @@ All pricing data lives in a metaobject. The theme code contains no width ranges 
 | Path | Purpose |
 | --- | --- |
 | `sections/curtain-configurator.liquid` | The section: gallery, inputs, summary card, and the JSON config read from the metafield |
-| `snippets/curtain-swatch.liquid` | One fabric swatch radio, used by swatch blocks and by the fallback |
+| `snippets/curtain-swatch.liquid` | One fabric swatch radio, used by the fabric picker and its fallback |
 | `snippets/curtain-trust-icon.liquid` | Line icons for the trust badges |
 | `assets/curtain-configurator.js` | The `<curtain-configurator>` custom element (vanilla ES2020, no libraries) |
 | `assets/curtain-configurator.css` | Styles, loaded only by this section |
@@ -98,7 +98,7 @@ The option names are section settings, so a product that uses "Colour" or "Lengt
 
 1. Push the theme with `shopify theme push --unpublished`, or copy in the files from the table above.
 2. In **Theme settings → Cart**, set **Cart type** to **Drawer**. The section also works with the notification popup or the cart page, but the drawer is the intended experience.
-3. Open the product in the theme editor. Each part of the product column is a block. Each Fabric swatch block's **Color option value** must match the variant's Color value exactly.
+3. Open the product in the theme editor. Each part of the product column is a block. In the Fabric picker block, each swatch's **Color option value** must match the variant's Color value exactly.
 
 ## How the price is calculated
 
@@ -226,8 +226,7 @@ Every part of the product column is its own block, so it can be reordered, remov
 | Description | None | Shows the product description |
 | Width input | Label, hint | The allowed range is added after the hint |
 | Drop picker | Label | Values come from the Drop option |
-| Fabric picker | Label | Shows the Fabric swatch blocks, or the Color values if there are none |
-| Fabric swatch | Color option value, swatch color, optional fabric image | One per color. The value must match the variant's Color value exactly |
+| Fabric picker | Label, and up to six swatches, each with a color option value, a swatch color and an optional fabric image | All swatches live in this one block. A swatch with a blank value is hidden. With none filled in, the product's Color values are shown |
 | Price and add to cart | Title, panel count visibility, note, delivery days, working days only | The summary card and button |
 | Marquee | Items, one per line, and seconds per loop | A slim scrolling strip under the add to cart card, edged like a curtain with a ringed rod on top and a scalloped hem below. Pauses on hover |
 | Trust badges | Icon, title and text for up to three badges | Sits under the marquee. A badge with an empty title is hidden |
@@ -242,7 +241,7 @@ The step numbers 01, 02 and 03 come from a CSS counter, so they follow the block
 **Delivery dates.** The note in the add to cart block can contain `[start]` and `[end]`. The script fills them with dates counted from today, for example "Made to order · Ships 16 October to 21 October". The earliest and latest day counts are settings, and weekends can be skipped. The dates are worked out in the browser, because Shopify may serve a cached page rendered on an earlier day.
 
 **Section settings.**
-- **Gallery:** image ratio, a badge on the first image ("Custom Fit" by default, blank to hide), and image zoom. On desktop the gallery takes 55% of the width and the product details 45%. The main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies, and on mobile the thumbnails move under the image.
+- **Gallery:** image ratio, a badge on the first image ("Custom Fit" by default, blank to hide), and image zoom. On desktop the gallery takes 60% of the width and the product details 40%. The main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies, and on mobile the thumbnails move under the image.
 
 **Image zoom.** On desktop, hovering the main image shows a 2.5x magnified copy that follows the pointer. On touch screens, a tap zooms in at that point, dragging pans, and a second tap zooms out. A magnifier button in the corner toggles zoom for keyboard and touch users, and Escape closes it. The magnified copy is a 2400px version of the image, loaded only when zoom is first used.
 - **Configuration:** default width, and the names of the Color, Drop and Panels options.
@@ -253,14 +252,14 @@ The section only appears on product templates. It shows a setup notice in the ed
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 63 checks against a live preview:
+`tests/e2e/run.mjs` runs 64 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
 - **Validation:** inline errors for 49, 361, 180.5 and an empty field.
 - **Delivery dates:** the note shows the dates 7 and 10 working days from today.
-- **Interaction:** color swaps the gallery image, and arrow keys move through the swatches.
-- **Layout:** a 1440px container on wide screens, a 55/45 desktop split, thumbnails to the left of the main image, the main image filling the screen below the header, three collapsible rows under the button, zero layout shift, and no horizontal overflow at tablet and mobile widths.
+- **Interaction:** color swaps the gallery image, arrow keys move through the swatches, and all swatches come from one fabric block.
+- **Layout:** a 1440px container on wide screens, a 60/40 desktop split, thumbnails to the left of the main image, the main image filling the screen below the header, three collapsible rows under the button, zero layout shift, and no horizontal overflow at tablet and mobile widths.
 - **Interaction:** rows start closed and only one opens at a time, and the button curtain covers the button on hover.
 - **Trust badges:** three badges sit between the add to cart card and the rows.
 - **Image:** the badge sits on the first image only, hover zoom follows the pointer and ends on leave, and the zoom button works from the keyboard.
