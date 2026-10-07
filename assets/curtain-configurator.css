@@ -919,18 +919,21 @@ curtain-configurator :focus-visible {
     grid-column: 1;
   }
 
+  /* The strip scrolls edge to edge, but the thumbnails start and end at the content margin. */
   .cc__thumbs {
     grid-row: 2;
     flex-direction: row;
     gap: 0.6rem;
     height: auto;
     min-height: 0;
+    padding-inline: 1.6rem;
     overflow-x: auto;
+    scroll-padding-inline: 1.6rem;
     scroll-snap-type: x mandatory;
   }
 
   .cc__thumbs li {
-    flex: 0 0 6.4rem;
+    flex: 1 0 6.4rem;
     scroll-snap-align: start;
   }
 

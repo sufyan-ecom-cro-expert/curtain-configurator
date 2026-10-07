@@ -352,14 +352,16 @@ for (const [name, width, height] of [
         stageTopGap: Math.round(stage.top - document.querySelector('curtain-configurator').getBoundingClientRect().top),
         stageRight: Math.round(stage.right),
         thumbsRight: Math.round(thumbs.getBoundingClientRect().right),
+        firstThumbLeft: Math.round(first.left),
+        lastThumbGap: Math.round(document.documentElement.clientWidth - thumbs.lastElementChild.getBoundingClientRect().right),
         viewport: document.documentElement.clientWidth,
         imageToThumbs: Math.round(first.top - stage.bottom),
         thumbGap: Math.round(second.left - first.right),
       };
     });
     check(
-      'mobile: gallery is edge to edge, flush to the top, with tight gaps',
-      gallery.stageLeft === 0 && gallery.stageTopGap === 0 && gallery.stageRight === gallery.viewport && gallery.thumbsRight === gallery.viewport && gallery.imageToThumbs <= 6 && gallery.thumbGap <= 6,
+      'mobile: image edge to edge, thumbnails inset like the content, tight gaps',
+      gallery.firstThumbLeft === 16 && gallery.lastThumbGap === 16 && gallery.stageLeft === 0 && gallery.stageTopGap === 0 && gallery.stageRight === gallery.viewport && gallery.thumbsRight === gallery.viewport && gallery.imageToThumbs <= 6 && gallery.thumbGap <= 6,
       JSON.stringify(gallery)
     );
   }
