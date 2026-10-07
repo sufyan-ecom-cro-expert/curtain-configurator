@@ -40,6 +40,8 @@ Everything else is stock Dawn. The few Dawn files that were changed are listed n
 
 Prices are decimals, not money fields, because the script does maths on them. The theme formats the result in the shop's currency. The same definition is in `schema/curtain-pricing-tier.json` if you'd rather create it with the Admin API.
 
+![Curtain Pricing Tier metaobject definition](docs/screenshots/metaobject-curtain-pricing-tier.png)
+
 **2. Tiers.** Add one entry per width range:
 
 | Width (cm) | Panels | Base price | Per drop step |
@@ -51,6 +53,8 @@ Prices are decimals, not money fields, because the script does maths on them. Th
 Ranges shouldn't overlap or leave gaps. The width input takes its minimum and maximum from these entries, so adding a tier widens it automatically.
 
 **3. Product metafield.** In Settings > Custom data > Products, add `custom.pricing_tiers` with the type "Metaobject, list", limited to Curtain Pricing Tier. Turn on storefront access.
+
+![Pricing tiers product metafield definition](docs/screenshots/metafield-pricing-tiers.png)
 
 **4. Product.** Create the product with three options, in this order:
 
