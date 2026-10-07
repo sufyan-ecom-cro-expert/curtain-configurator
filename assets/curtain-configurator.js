@@ -6,6 +6,19 @@ const formatMoney = (cents, format) =>
     return fraction ? `${grouped}${decimal}${fraction}` : grouped;
   });
 
+const addDays = (days, workingDaysOnly) => {
+  const date = new Date();
+  while (days > 0) {
+    date.setDate(date.getDate() + 1);
+    // getDay() is 0 on Sunday and 6 on Saturday.
+    if (!workingDaysOnly || date.getDay() % 6 !== 0) days--;
+  }
+  return date;
+};
+
+const formatDay = (date) =>
+  `${date.getDate()} ${date.toLocaleDateString(document.documentElement.lang || undefined, { month: 'long' })}`;
+
 class CurtainConfigurator extends HTMLElement {
   connectedCallback() {
     this.form = this.querySelector('form');
@@ -32,7 +45,19 @@ class CurtainConfigurator extends HTMLElement {
       thumb.addEventListener('click', () => this.showMedia(thumb.dataset.mediaTarget))
     );
 
+    this.renderDeliveryDates();
     this.update();
+  }
+
+  renderDeliveryDates() {
+    const note = this.querySelector('[data-delivery-note]');
+    if (!note) return;
+
+    const { deliveryNote, minDays, maxDays, workingDays } = note.dataset;
+    const workingDaysOnly = workingDays === 'true';
+    const start = addDays(Number(minDays), workingDaysOnly);
+    const end = addDays(Math.max(Number(minDays), Number(maxDays)), workingDaysOnly);
+    note.textContent = deliveryNote.replace('[start]', formatDay(start)).replace('[end]', formatDay(end));
   }
 
   onInput(event) {

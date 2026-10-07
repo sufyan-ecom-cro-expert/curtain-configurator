@@ -198,6 +198,7 @@ Dawn already hides underscore properties in both cart templates, so no change wa
 - **Fixed media box.** The gallery uses a fixed aspect ratio, and every image has width and height attributes.
 - **Reserved message slot.** The hint and the validation error share one grid cell. Errors toggle visibility instead of being inserted.
 - **Stable text boxes.** The price, the summary values and the button label sit in boxes that don't change size when their text changes. Numbers use tabular figures.
+- **Reserved note height.** The delivery note keeps room for its text before the script fills in the dates, two lines on mobile.
 - **First paint.** The first price is rendered by Liquid, so nothing moves when the script runs.
 - **Animation.** Price changes animate with `opacity` and `transform` only.
 
@@ -214,6 +215,7 @@ The end-to-end test records every `layout-shift` entry during the interactions a
 ## Theme editor settings
 
 - **Content:** heading, vendor, description, panel count visibility, the note under the button, and image ratio.
+- **Delivery dates:** the note can contain `[start]` and `[end]`. The script fills them with dates counted from today, for example "Made to order · Ships 16 October to 21 October". The earliest and latest day counts are settings, and weekends can be skipped. The dates are worked out in the browser, because Shopify may serve a cached page rendered on an earlier day.
 - **Configuration:** default width, and the names of the Color, Drop and Panels options.
 - **Style:** heading font, background (white by default), alternative background (#F7F7F7, used for the summary card, inputs and image backdrop), text and accent colors.
 - **Spacing:** top and bottom padding, and the column gap.
@@ -223,11 +225,12 @@ The section only appears on product templates. It shows a setup notice in the ed
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 41 checks against a live preview:
+`tests/e2e/run.mjs` runs 42 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
 - **Validation:** inline errors for 49, 361, 180.5 and an empty field.
+- **Delivery dates:** the note shows the dates 7 and 10 working days from today.
 - **Interaction:** color swaps the gallery image, and arrow keys move through the swatches.
 - **Layout:** zero layout shift, and no horizontal overflow at tablet and mobile widths.
 - **Cart:** the exact `/cart/add.js` payload, the drawer contents, the cart page contents, and the cart line read back from `/cart.js`.

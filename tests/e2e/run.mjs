@@ -61,6 +61,17 @@ const setWidth = async (v) => {
 const pickDrop = (v) => page.locator(`label.cc__drop:has-text("${v}")`).click();
 const pickColor = (v) => page.locator(`label.cc__swatch:has-text("${v}")`).click();
 
+const expectedDay = (days) => {
+  const date = new Date();
+  while (days > 0) {
+    date.setDate(date.getDate() + 1);
+    if (date.getDay() % 6 !== 0) days--;
+  }
+  return `${date.getDate()} ${date.toLocaleDateString('en', { month: 'long' })}`;
+};
+const note = await page.locator('.cc__note').innerText();
+check('delivery dates', note === `Made to order · Ships ${expectedDay(7)} to ${expectedDay(10)}`, note);
+
 check('initial price', (await price()) === 'Rs.22,000.00', await price());
 check('initial label', (await label()).includes('Rs.22,000.00'), await label());
 

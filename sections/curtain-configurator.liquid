@@ -252,8 +252,25 @@
 
             <p class="cc__form-error" data-form-error role="alert"></p>
 
-            {%- if section.settings.note != blank -%}
-              <p class="cc__note">{{ section.settings.note }}</p>
+            {%- liquid
+              assign note = section.settings.note
+              assign has_dates = false
+              if note contains '[start]' or note contains '[end]'
+                assign has_dates = true
+              endif
+            -%}
+            {%- if note != blank -%}
+              <p
+                class="cc__note"
+                {% if has_dates %}
+                  data-delivery-note="{{ note | escape }}"
+                  data-min-days="{{ section.settings.delivery_min_days }}"
+                  data-max-days="{{ section.settings.delivery_max_days }}"
+                  data-working-days="{{ section.settings.delivery_working_days }}"
+                {% endif %}
+              >
+                {%- unless has_dates %}{{ note }}{% endunless -%}
+              </p>
             {%- endif -%}
           </div>
         </form>
@@ -351,7 +368,33 @@
       "type": "text",
       "id": "note",
       "label": "Note under button",
-      "default": "Made to order in 7–10 working days"
+      "default": "Made to order · Ships [start] to [end]",
+      "info": "Use [start] and [end] to show dates that update every day."
+    },
+    {
+      "type": "range",
+      "id": "delivery_min_days",
+      "label": "Earliest date (days from today)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "delivery_max_days",
+      "label": "Latest date (days from today)",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "delivery_working_days",
+      "label": "Count working days only",
+      "info": "Skips Saturdays and Sundays.",
+      "default": true
     },
     {
       "type": "select",

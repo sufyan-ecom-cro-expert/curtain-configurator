@@ -504,8 +504,10 @@
 }
 
 .cc__note {
+  min-height: 1.5em;
   margin: -1.2rem 0 0;
   font-size: 1.3rem;
+  line-height: 1.5;
   color: var(--cc-muted);
   text-align: center;
 }
@@ -593,5 +595,10 @@
 
   .cc__swatches {
     gap: 1.4rem 1.6rem;
+  }
+
+  /* Room for two lines, so the dates filled in by the script never push content down. */
+  .cc__note {
+    min-height: 3em;
   }
 }
