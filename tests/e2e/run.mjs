@@ -341,6 +341,26 @@ for (const [name, width, height] of [
   await revealAll();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   check(`${name}: no horizontal overflow`, overflow <= 0, String(overflow));
+  if (name === 'mobile') {
+    const gallery = await page.evaluate(() => {
+      const stage = document.querySelector('.cc__stage').getBoundingClientRect();
+      const thumbs = document.querySelector('.cc__thumbs');
+      const first = thumbs.children[0].getBoundingClientRect();
+      const second = thumbs.children[1].getBoundingClientRect();
+      return {
+        stageRight: Math.round(stage.right),
+        thumbsRight: Math.round(thumbs.getBoundingClientRect().right),
+        viewport: document.documentElement.clientWidth,
+        imageToThumbs: Math.round(first.top - stage.bottom),
+        thumbGap: Math.round(second.left - first.right),
+      };
+    });
+    check(
+      'mobile: gallery reaches the right edge with tight gaps',
+      gallery.stageRight === gallery.viewport && gallery.thumbsRight === gallery.viewport && gallery.imageToThumbs <= 6 && gallery.thumbGap <= 6,
+      JSON.stringify(gallery)
+    );
+  }
   await page.screenshot({ path: `${OUT}${name}.png`, fullPage: true });
 }
 

@@ -900,8 +900,11 @@ curtain-configurator :focus-visible {
     padding-inline: 1.6rem;
   }
 
+  /* The negative margin cancels the container's right padding so the gallery runs to the screen edge. */
   .cc__gallery {
     position: static;
+    gap: 0.6rem;
+    margin-right: -1.6rem;
   }
 
   .cc__gallery--thumbs {
@@ -915,6 +918,7 @@ curtain-configurator :focus-visible {
   .cc__thumbs {
     grid-row: 2;
     flex-direction: row;
+    gap: 0.6rem;
     height: auto;
     min-height: 0;
     overflow-x: auto;

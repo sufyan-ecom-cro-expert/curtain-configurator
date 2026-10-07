@@ -241,7 +241,7 @@ The step numbers 01, 02 and 03 come from a CSS counter, so they follow the block
 **Delivery dates.** The note in the add to cart block can contain `[start]` and `[end]`. The script fills them with dates counted from today, for example "Made to order · Ships 16 October to 21 October". The earliest and latest day counts are settings, and weekends can be skipped. The dates are worked out in the browser, because Shopify may serve a cached page rendered on an earlier day.
 
 **Section settings.**
-- **Gallery:** image ratio, a badge on the first image ("Custom Fit" by default, blank to hide), and image zoom. On desktop the gallery takes 60% of the width and the product details 40%. The main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies, and on mobile the thumbnails move under the image.
+- **Gallery:** image ratio, a badge on the first image ("Custom Fit" by default, blank to hide), and image zoom. On desktop the gallery takes 60% of the width and the product details 40%. The main image fills the screen below the header, with thumbnails in a column on its left. On tablet and mobile the ratio applies. On mobile the thumbnails move under the image, the gaps tighten to 6px, and the gallery runs to the right edge of the screen.
 
 **Image zoom.** On desktop, hovering the main image shows a 2.5x magnified copy that follows the pointer. On touch screens, a tap zooms in at that point, dragging pans, and a second tap zooms out. A magnifier button in the corner toggles zoom for keyboard and touch users, and Escape closes it. The magnified copy is a 2400px version of the image, loaded only when zoom is first used.
 - **Configuration:** default width, and the names of the Color, Drop and Panels options.
@@ -252,7 +252,7 @@ The section only appears on product templates. It shows a setup notice in the ed
 
 ## Testing
 
-`tests/e2e/run.mjs` runs 64 checks against a live preview:
+`tests/e2e/run.mjs` runs 65 checks against a live preview:
 
 - **Rendering:** no Panels control on the page, and no Dawn product form.
 - **Pricing:** price and panel count at every tier boundary, from 50 to 360 cm.
