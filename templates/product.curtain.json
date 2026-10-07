@@ -149,6 +149,7 @@
         "text": "#000000",
         "accent": "#6c382e",
         "curtain_color": "#F3E4D4",
+        "container_width": 1440,
         "padding_top": 16,
         "padding_bottom": 64,
         "column_gap": 64

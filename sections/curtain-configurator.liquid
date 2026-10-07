@@ -71,6 +71,7 @@
     --cc-pad-top: {{ section.settings.padding_top }}px;
     --cc-pad-bottom: {{ section.settings.padding_bottom }}px;
     --cc-gap: {{ section.settings.column_gap }}px;
+    --cc-max-width: {{ section.settings.container_width }}px;
     --cc-ratio: {{ media_ratio }};
   }
 {% endstyle %}
@@ -87,7 +88,7 @@
 </script>
 
 <curtain-configurator>
-  <div class="cc__inner page-width">
+  <div class="cc__inner">
     <div class="cc__gallery{% if product.media.size > 1 %} cc__gallery--thumbs{% endif %}">
       <div class="cc__stage{% if section.settings.enable_zoom and product.media.size > 0 %} cc__stage--zoom{% endif %}">
         {%- for media in product.media -%}
@@ -563,6 +564,16 @@
     {
       "type": "header",
       "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1440
     },
     {
       "type": "range",

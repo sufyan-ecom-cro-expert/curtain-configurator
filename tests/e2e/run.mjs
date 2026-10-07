@@ -315,6 +315,11 @@ await page.waitForTimeout(500);
 check('network error shown', (await page.locator('[data-form-error]').innerText()).startsWith('Something went wrong'));
 await page.unroute('**/cart/add.js');
 
+await page.setViewportSize({ width: 1800, height: 1000 });
+await page.goto(`${STORE}${PDP}`, { waitUntil: 'load' });
+const container = await page.locator('.cc__inner').evaluate((el) => Math.round(el.getBoundingClientRect().width));
+check('container max width is 1440px', container === 1440, `${container}px at an 1800px window`);
+
 for (const [name, width, height] of [
   ['tablet', 900, 1100],
   ['mobile', 390, 844],
