@@ -12,7 +12,7 @@ curtain-configurator {
 
 .cc__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
   gap: var(--cc-gap);
   align-items: start;
   max-width: var(--cc-max-width);

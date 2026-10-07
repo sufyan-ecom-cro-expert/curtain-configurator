@@ -102,7 +102,7 @@
               if media.id == active_media.id
                 assign loading = 'eager'
               endif
-              echo media.preview_image | image_url: width: 1600 | image_tag: widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 992px) 50vw, 100vw', loading: loading, alt: media.alt
+              echo media.preview_image | image_url: width: 1600 | image_tag: widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 992px) 55vw, 100vw', loading: loading, alt: media.alt
             -%}
             {%- if forloop.first and section.settings.image_badge != blank -%}
               <span class="cc__image-badge">{{ section.settings.image_badge }}</span>

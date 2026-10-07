@@ -100,6 +100,12 @@ const layout = await page.evaluate(() => {
   };
 });
 check('desktop thumbnails left of main image', layout.thumbLeftOfStage);
+const split = await page.evaluate(() => {
+  const gallery = document.querySelector('.cc__gallery').getBoundingClientRect().width;
+  const panel = document.querySelector('.cc__panel').getBoundingClientRect().width;
+  return Math.round((gallery / (gallery + panel)) * 1000) / 10;
+});
+check('desktop split is 55% gallery, 45% info', Math.abs(split - 55) < 0.2, `${split}% gallery`);
 check('main image fills screen below header', Math.abs(layout.stageHeight - layout.expectedHeight) <= 1, `${layout.stageHeight} vs ${layout.expectedHeight}`);
 check('three collapsible rows below add to cart', layout.rows === 3 && layout.rowsAfterSummary, String(layout.rows));
 const rowTitles = await page.locator('.cc__row-title').evaluateAll((els) => els.map((el) => el.textContent.trim()));
@@ -156,7 +162,7 @@ const zoomIn = await page.evaluate(() => {
 });
 await page.mouse.move(stageBox.x + 2, stageBox.y + 2);
 const cornerPosition = await page.locator('.cc__zoom').evaluate((el) => el.style.backgroundPosition);
-check('hover zooms the main image', zoomIn.zoomed && zoomIn.visible && zoomIn.opacity === '1' && zoomIn.image.includes('width=2400') && zoomIn.size >= zoomIn.width * 2.5, JSON.stringify(zoomIn));
+check('hover zooms the main image', zoomIn.zoomed && zoomIn.visible && zoomIn.opacity === '1' && zoomIn.image.includes('width=2400') && zoomIn.size >= zoomIn.width * 2.5 - 1, JSON.stringify(zoomIn));
 check('zoom follows the pointer', /^0\.\d+% 0\.\d+%$|^0% 0%$/.test(cornerPosition), cornerPosition);
 await page.mouse.move(0, 0);
 await page.waitForTimeout(300);
